@@ -5,4 +5,7 @@ import react from '@vitejs/plugin-react-swc';
 export default defineConfig({
   base: '/mazes-app/',
   plugins: [react()],
+  test: {
+    mockReset: true,
+  },
 });

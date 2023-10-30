@@ -36,6 +36,30 @@ export default class Grid {
     }
   };
 
+  toString = (): string => {
+    const lines: string[] = [];
+    lines.push(`+${'---+'.repeat(this.#columns)}`);
+
+    for (let r = 0; r < this.#rows; r++) {
+      let top = '|';
+      let bottom = '+';
+
+      for (let c = 0; c < this.#columns; c++) {
+        const cell = this.get(r, c);
+        const eastBoundary = cell?.isLinkedTo(cell?.east) ? ' ' : '|';
+        top = `${top}   ${eastBoundary}`;
+
+        const southBoundary = cell?.isLinkedTo(cell?.south) ? '   ' : '---';
+        bottom = `${bottom}${southBoundary}+`;
+      }
+
+      lines.push(top);
+      lines.push(bottom);
+    }
+
+    return lines.join('\n');
+  };
+
   #prepareGrid = () => {
     const grid: Array<Array<Cell>> = [];
     for (let r = 0; r < this.#rows; r++) {

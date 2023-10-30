@@ -52,5 +52,5 @@ export default class Cell {
     return this;
   };
 
-  isLinkedTo = (cell: Cell): boolean => this.#links.has(cell);
+  isLinkedTo = (cell: Cell | undefined): boolean => (cell ? this.#links.has(cell) : false);
 }

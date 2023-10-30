@@ -1,6 +1,8 @@
 import Cell from './cell';
 import { randomInteger } from './random';
 
+type CellCallback = (cell: Cell) => void;
+
 export default class Grid {
   #rows: number;
   #columns: number;
@@ -23,6 +25,15 @@ export default class Grid {
     const row = randomInteger(this.#rows);
     const column = randomInteger(this.#columns);
     return this.#getOrThrow(row, column);
+  };
+
+  forEachCell = (cb: CellCallback) => {
+    for (let r = 0; r < this.#rows; r++) {
+      for (let c = 0; c < this.#columns; c++) {
+        const cell = this.#getOrThrow(r, c);
+        cb(cell);
+      }
+    }
   };
 
   #prepareGrid = () => {

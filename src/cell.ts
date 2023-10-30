@@ -30,7 +30,11 @@ export default class Cell {
     return [this.north, this.south, this.east, this.west].filter(Boolean);
   }
 
-  link = (cell: Cell, options = { bidi: true }): this => {
+  link = (cell: Cell | undefined, options = { bidi: true }): this => {
+    if (!cell) {
+      return this;
+    }
+
     this.#links.add(cell);
     if (options.bidi) {
       cell.link(this, { bidi: false });

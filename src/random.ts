@@ -3,5 +3,9 @@ export function randomInteger(max: number) {
     throw new Error('max must be nonnegative');
   }
 
+  if (max === 0) {
+    return 0;
+  }
+
   return Math.floor(Math.random() * max);
 }

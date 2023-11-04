@@ -1,12 +1,14 @@
 import Cell from './cell';
 import { randomInteger } from './random';
 
-type CellCallback = (cell: Cell) => void;
+export type Row = Array<Cell>;
+export type CellCallback = (cell: Cell) => void;
+export type RowCallback = (row: Row) => void;
 
 export default class Grid {
   #rows: number;
   #columns: number;
-  #grid: Array<Array<Cell>>;
+  #grid: Array<Row>;
 
   constructor(rows: number, columns: number) {
     this.#rows = rows;
@@ -36,6 +38,12 @@ export default class Grid {
     }
   };
 
+  forEachRow = (cb: RowCallback) => {
+    for (let r = 0; r < this.#rows; r++) {
+      cb(this.#grid[r]!);
+    }
+  };
+
   toString = (): string => {
     const lines: string[] = [];
     lines.push(`+${'---+'.repeat(this.#columns)}`);
@@ -61,9 +69,9 @@ export default class Grid {
   };
 
   #prepareGrid = () => {
-    const grid: Array<Array<Cell>> = [];
+    const grid: Array<Row> = [];
     for (let r = 0; r < this.#rows; r++) {
-      const row: Array<Cell> = [];
+      const row: Row = [];
       for (let c = 0; c < this.#columns; c++) {
         row.push(new Cell(r, c));
       }

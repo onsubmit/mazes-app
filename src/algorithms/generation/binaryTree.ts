@@ -1,9 +1,10 @@
 import Cell from '../../cell';
 import Grid from '../../grid';
 import { randomInteger } from '../../random';
+import MazeGenerator from './mazeGenerator';
 
-export default class BinaryTree {
-  static execute = (grid: Grid): Grid => {
+export default class BinaryTree implements MazeGenerator {
+  execute = (grid: Grid): Grid => {
     grid.forEachCell((cell: Cell) => {
       const neighbors = [cell.north, cell.east].filter(Boolean);
       const index = randomInteger(neighbors.length);

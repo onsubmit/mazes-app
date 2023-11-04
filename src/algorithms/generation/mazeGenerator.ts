@@ -1,5 +1,5 @@
 import Grid from '../../grid';
 
 export default interface MazeGenerator {
-  execute: (grid: Grid) => Grid;
+  execute: <T extends Grid>(grid: T) => T;
 }

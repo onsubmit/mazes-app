@@ -1,7 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
 import Grid from './grid';
-import { assertDefined } from './testHelpers';
 
 describe('Grid', () => {
   it('Should initialize a basic Grid', () => {
@@ -13,8 +12,7 @@ describe('Grid', () => {
 
   it('Should support getting a specific cell', () => {
     const grid = new Grid(5, 5);
-    const cell = grid.get(2, 3);
-    assertDefined(cell);
+    const cell = grid.getOrThrow(2, 3);
 
     expect(cell.row).toBe(2);
     expect(cell.column).toBe(3);
@@ -36,20 +34,25 @@ describe('Grid', () => {
     expect(cellCallback).to.toHaveBeenCalledTimes(21);
   });
 
+  it('Should not throw when getting a cell outside the grid bounds', () => {
+    const grid = new Grid(5, 5);
+    const cell = grid.get(9, 13);
+    expect(cell).toBe(undefined);
+  });
+
+  it('Should throw when getting a cell outside the grid bounds', () => {
+    const grid = new Grid(5, 5);
+    expect(() => grid.getOrThrow(9, 13)).toThrowError('Invalid index: (9, 13)');
+  });
+
   it('Should set up cell neighbors', () => {
     const grid = new Grid(5, 5);
 
-    const cell = grid.get(3, 2);
-    const north = grid.get(2, 2);
-    const south = grid.get(4, 2);
-    const west = grid.get(3, 1);
-    const east = grid.get(3, 3);
-
-    assertDefined(cell);
-    assertDefined(north);
-    assertDefined(south);
-    assertDefined(west);
-    assertDefined(east);
+    const cell = grid.getOrThrow(3, 2);
+    const north = grid.getOrThrow(2, 2);
+    const south = grid.getOrThrow(4, 2);
+    const west = grid.getOrThrow(3, 1);
+    const east = grid.getOrThrow(3, 3);
 
     expect(cell.north?.row).toBe(north.row);
     expect(cell.north?.column).toBe(north.column);

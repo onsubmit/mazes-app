@@ -4,7 +4,7 @@ import { randomInteger } from '../../random';
 import MazeGenerator from './mazeGenerator';
 
 export default class BinaryTree implements MazeGenerator {
-  execute = (grid: Grid): Grid => {
+  execute = <T extends Grid>(grid: T): T => {
     grid.forEachCell((cell: Cell) => {
       const neighbors = [cell.north, cell.east].filter(Boolean);
       const index = randomInteger(neighbors.length);

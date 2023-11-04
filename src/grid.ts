@@ -17,6 +17,14 @@ export default class Grid {
     this.#configureCells();
   }
 
+  get rows(): number {
+    return this.#rows;
+  }
+
+  get columns(): number {
+    return this.#columns;
+  }
+
   get size(): number {
     return this.#rows * this.#columns;
   }

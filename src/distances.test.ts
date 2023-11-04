@@ -8,7 +8,7 @@ describe('Distances', () => {
     const root = new Cell(2, 3);
     const distances = new Distances(root);
 
-    const distance = distances.get(root);
+    const distance = distances.getOrThrow(root);
     expect(distance).toBe(0);
   });
 

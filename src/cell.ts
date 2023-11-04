@@ -1,3 +1,5 @@
+import Distances from './distances';
+
 export default class Cell {
   #row: number;
   #column: number;
@@ -28,6 +30,30 @@ export default class Cell {
 
   get neighbors(): Cell[] {
     return [this.north, this.south, this.east, this.west].filter(Boolean);
+  }
+
+  get distances(): Distances {
+    const distances = new Distances(this);
+    let frontier: Set<Cell> = new Set([this]);
+
+    while (frontier.size) {
+      const newFrontier: Set<Cell> = new Set();
+
+      for (const cell of frontier) {
+        for (const linked of cell.links) {
+          if (distances.has(linked)) {
+            continue;
+          }
+
+          distances.set(linked, distances.getOrThrow(cell) + 1);
+          newFrontier.add(linked);
+        }
+      }
+
+      frontier = newFrontier;
+    }
+
+    return distances;
   }
 
   link = (cell: Cell | undefined, options = { bidi: true }): this => {

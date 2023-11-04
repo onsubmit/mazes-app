@@ -1,7 +1,6 @@
 import BinaryTree from '../../algorithms/generation/binaryTree';
 import Sidewinder from '../../algorithms/generation/sidewinder';
 import DistanceGrid from '../../distanceGrid';
-import Canvas from '../canvas';
 
 export default function Chapter03() {
   const binaryTreeGrid = new BinaryTree().execute(new DistanceGrid(10, 10));
@@ -13,11 +12,9 @@ export default function Chapter03() {
     <>
       <h1>Distance Grid: Binary Tree Demo</h1>
       <pre>{binaryTreeGrid.toString()}</pre>
-      <Canvas grid={binaryTreeGrid}></Canvas>
 
       <h1>Sidewinder Demo</h1>
       <pre>{sidewinderGrid.toString()}</pre>
-      <Canvas grid={sidewinderGrid}></Canvas>
     </>
   );
 }

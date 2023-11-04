@@ -1,63 +1,74 @@
 import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
+import Tab, { TabProps } from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import * as React from 'react';
 
 import Chapter02 from './components/chapters/chapter02';
 import Chapter03 from './components/chapters/chapter03';
 
-interface TabPanelProps {
-  children?: React.ReactNode;
+type ChapterPanelProps = {
+  children: React.ReactNode;
   index: number;
-  value: number;
-}
+  selectedIndex: number;
+  chapter: number;
+};
 
-function CustomTabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
+function ChapterPanel(props: ChapterPanelProps) {
+  const { children, index, selectedIndex, chapter, ...other } = props;
 
   return (
     <div
       role="tabpanel"
-      hidden={value !== index}
-      id={`chapter-tabpanel-${index}`}
-      aria-labelledby={`chapter-tab-${index}`}
+      hidden={selectedIndex !== index}
+      id={`chapter${chapter}-tabpanel`}
+      aria-labelledby={`chapter${chapter}-tab`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {selectedIndex === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 }
 
-function a11yProps(index: number) {
+function getTabProps(chapter: number): TabProps {
   return {
-    id: `chapter-tab-${index}`,
-    'aria-controls': `chapter-tabpanel-${index}`,
+    label: `Chapter ${chapter}`,
+    key: `chapter${chapter}`,
+    id: `chapter${chapter}-tab`,
+    'aria-controls': `chapter${chapter}-tabpanel`,
+  };
+}
+
+function getChapterPanelProps(
+  selectedIndex: number,
+  index: number,
+  chapter: number
+): Omit<ChapterPanelProps, 'children'> & { key: string } {
+  return {
+    selectedIndex,
+    index,
+    chapter,
+    key: `chapter${chapter}-panel`,
   };
 }
 
 export default function App() {
   const [value, setValue] = React.useState(0);
 
-  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
-
-  const chapters = [<Chapter02 />, <Chapter03 />];
-
+  const chapters = [<Chapter03 />, <Chapter02 />];
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="Chapter tabs">
-          {chapters.map((_chapter, i) => (
-            <Tab label={`Chapter ${i + 2}`} key={`chpt${i}`} {...a11yProps(i)} />
-          ))}
+        <Tabs value={value} onChange={(_, value) => setValue(value)} aria-label="Chapter tabs">
+          {chapters.map((_chapter, i) => {
+            const chapterNumber = chapters.length + 1 - i;
+            return <Tab {...getTabProps(chapterNumber)} />;
+          })}
         </Tabs>
       </Box>
-      {chapters.map((chapter, i) => (
-        <CustomTabPanel value={value} index={i} key={`chpt-panel${i}`}>
-          {chapter}
-        </CustomTabPanel>
-      ))}
+      {chapters.map((chapter, i) => {
+        const chapterNumber = chapters.length + 1 - i;
+        return <ChapterPanel {...getChapterPanelProps(value, i, chapterNumber)}>{chapter}</ChapterPanel>;
+      })}
     </Box>
   );
 }

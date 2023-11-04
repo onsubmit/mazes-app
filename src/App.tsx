@@ -4,7 +4,7 @@ import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 
-import Chapter01 from './components/ch01/chapter01';
+import Chapter02 from './components/chapters/chapter02';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -46,7 +46,7 @@ export default function App() {
     setValue(newValue);
   };
 
-  const chapters = [<Chapter01 />];
+  const chapters = [<Chapter02 />];
 
   return (
     <Box sx={{ width: '100%' }}>

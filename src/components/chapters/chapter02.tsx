@@ -3,7 +3,7 @@ import Sidewinder from '../../algorithms/generation/sidewinder';
 import Grid from '../../grid';
 import Canvas from '../canvas';
 
-function Chapter01() {
+function Chapter02() {
   const binaryTreeGrid = new BinaryTree().execute(new Grid(10, 10));
   const sidewinderGrid = new Sidewinder().execute(new Grid(10, 10));
   return (
@@ -18,4 +18,4 @@ function Chapter01() {
   );
 }
 
-export default Chapter01;
+export default Chapter02;

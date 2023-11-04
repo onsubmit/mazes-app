@@ -9,6 +9,10 @@ export default class Distances {
     this.#cells = new Map([[root, 0]]);
   }
 
+  get cells(): IterableIterator<Cell> {
+    return this.#cells.keys();
+  }
+
   getOrThrow = (cell: Cell): number => {
     const distance = this.#cells.get(cell);
     if (distance === undefined) {
@@ -20,8 +24,4 @@ export default class Distances {
 
   has = (cell: Cell): boolean => this.#cells.has(cell);
   set = (cell: Cell, distance: number): CellNumberMap => this.#cells.set(cell, distance);
-
-  get cells(): IterableIterator<Cell> {
-    return this.#cells.keys();
-  }
 }

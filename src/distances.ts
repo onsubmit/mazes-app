@@ -48,4 +48,18 @@ export default class Distances {
 
     return breadcrumbs;
   };
+
+  getFurthestCell = (): { cell: Cell; distance: number } => {
+    let maxDistance = 0;
+    let maxCell = this.#root;
+
+    for (const [cell, distance] of this.#cells.entries()) {
+      if (distance > maxDistance) {
+        maxCell = cell;
+        maxDistance = distance;
+      }
+    }
+
+    return { cell: maxCell, distance: maxDistance };
+  };
 }

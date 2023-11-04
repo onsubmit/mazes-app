@@ -7,7 +7,7 @@ import DistanceGrid from '../../distanceGrid';
 export default function Chapter03() {
   const binaryTreeGrid = new BinaryTree().execute(new DistanceGrid(10, 10));
   const binaryTreeGridStart = binaryTreeGrid.getOrThrow(0, 0);
-  const binaryTreeGridEnd = binaryTreeGrid.getOrThrow(binaryTreeGrid.rows - 1, 0);
+  const binaryTreeGridEnd = binaryTreeGridStart.distances.getFurthestCell().cell;
 
   binaryTreeGrid.setPathStart(binaryTreeGridStart);
   const binaryTreeGridUnsolved = binaryTreeGrid.toString();
@@ -17,7 +17,7 @@ export default function Chapter03() {
 
   const sidewinderGrid = new Sidewinder().execute(new DistanceGrid(10, 10));
   const sidewinderGridStart = sidewinderGrid.getOrThrow(0, 0);
-  const sidewinderGridEnd = sidewinderGrid.getOrThrow(sidewinderGrid.rows - 1, 0);
+  const sidewinderGridEnd = sidewinderGridStart.distances.getFurthestCell().cell;
 
   sidewinderGrid.setPathStart(sidewinderGridStart);
   const sidewinderGridUnsolved = sidewinderGrid.toString();

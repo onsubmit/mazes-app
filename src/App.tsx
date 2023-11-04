@@ -1,7 +1,6 @@
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import Typography from '@mui/material/Typography';
 import * as React from 'react';
 
 import Chapter02 from './components/chapters/chapter02';
@@ -23,11 +22,7 @@ function CustomTabPanel(props: TabPanelProps) {
       aria-labelledby={`chapter-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 }
@@ -53,12 +48,12 @@ export default function App() {
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="Chapter tabs">
           {chapters.map((_chapter, i) => (
-            <Tab label={`Chapter ${i + 1}`} {...a11yProps(i)} />
+            <Tab label={`Chapter ${i + 2}`} key={`chpt${i}`} {...a11yProps(i)} />
           ))}
         </Tabs>
       </Box>
       {chapters.map((chapter, i) => (
-        <CustomTabPanel value={value} index={i}>
+        <CustomTabPanel value={value} index={i} key={`chpt-panel${i}`}>
           {chapter}
         </CustomTabPanel>
       ))}

@@ -37,6 +37,8 @@ export default class Grid {
     return this.#getOrThrow(row, column);
   };
 
+  getCellContents = (_cell: Cell) => ' ';
+
   forEachCell = (cb: CellCallback) => {
     for (let r = 0; r < this.#rows; r++) {
       for (let c = 0; c < this.#columns; c++) {
@@ -61,9 +63,9 @@ export default class Grid {
       let bottom = '+';
 
       for (let c = 0; c < this.#columns; c++) {
-        const cell = this.get(r, c);
-        const eastBoundary = cell?.isLinkedTo(cell?.east) ? ' ' : '|';
-        top = `${top}   ${eastBoundary}`;
+        const cell = this.#getOrThrow(r, c);
+        const eastBoundary = cell.isLinkedTo(cell.east) ? ' ' : '|';
+        top = [top, this.getCellContents(cell), eastBoundary].join(' ');
 
         const southBoundary = cell?.isLinkedTo(cell?.south) ? '   ' : '---';
         bottom = `${bottom}${southBoundary}+`;

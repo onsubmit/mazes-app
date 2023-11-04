@@ -29,6 +29,10 @@ export default class Grid {
     return this.#rows * this.#columns;
   }
 
+  getCellContents(_cell: Cell): string {
+    return ' ';
+  }
+
   get = (row: number, column: number): Cell | undefined => this.#grid[row]?.[column];
 
   getOrThrow = (row: number, column: number): Cell => {
@@ -45,8 +49,6 @@ export default class Grid {
     const column = randomInteger(this.#columns);
     return this.getOrThrow(row, column);
   };
-
-  getCellContents = (_cell: Cell): string => ' ';
 
   forEachCell = (cb: CellCallback) => {
     for (let r = 0; r < this.#rows; r++) {

@@ -1,3 +1,5 @@
+import './chapterStyles.scss';
+
 import BinaryTree from '../../algorithms/generation/binaryTree';
 import Sidewinder from '../../algorithms/generation/sidewinder';
 import Grid from '../../grid';
@@ -9,12 +11,16 @@ export default function Chapter02() {
   return (
     <>
       <h1>Binary Tree Demo</h1>
-      <pre>{binaryTreeGrid.toString()}</pre>
-      <Canvas grid={binaryTreeGrid}></Canvas>
+      <div className="row">
+        <pre>{binaryTreeGrid.toString()}</pre>
+        <Canvas grid={binaryTreeGrid}></Canvas>
+      </div>
 
       <h1>Sidewinder Demo</h1>
-      <pre>{sidewinderGrid.toString()}</pre>
-      <Canvas grid={sidewinderGrid}></Canvas>
+      <div className="row">
+        <pre>{sidewinderGrid.toString()}</pre>
+        <Canvas grid={sidewinderGrid}></Canvas>
+      </div>
     </>
   );
 }

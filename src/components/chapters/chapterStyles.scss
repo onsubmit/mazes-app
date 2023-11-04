@@ -1,0 +1,17 @@
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 2rem;
+
+  > * {
+    border: 0.25rem solid #333;
+    box-shadow: 0.25rem 0.25rem 0.25rem #000;
+    padding: 1rem;
+  }
+}
+
+pre {
+  margin: 0;
+  padding: 0;
+}

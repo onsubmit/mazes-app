@@ -7,7 +7,7 @@ type CanvasProps = {
   cellSize?: number;
 };
 
-export default function Canvas({ grid, cellSize = 40 }: CanvasProps) {
+export default function Canvas({ grid, cellSize = 32 }: CanvasProps) {
   const width = cellSize * grid.columns + 1;
   const height = cellSize * grid.rows + 1;
 

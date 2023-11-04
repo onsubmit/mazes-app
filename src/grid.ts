@@ -33,6 +33,8 @@ export default class Grid {
     return ' ';
   }
 
+  getCellBackgroundColor(_cell: Cell): string | void {}
+
   get = (row: number, column: number): Cell | undefined => this.#grid[row]?.[column];
 
   getOrThrow = (row: number, column: number): Cell => {

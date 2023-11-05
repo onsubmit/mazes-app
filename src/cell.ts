@@ -28,6 +28,10 @@ export default class Cell {
     return [...this.#links.keys()];
   }
 
+  get hasLinks(): boolean {
+    return this.#links.size > 0;
+  }
+
   get neighbors(): Cell[] {
     return [this.north, this.south, this.east, this.west].filter(Boolean);
   }

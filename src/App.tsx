@@ -5,6 +5,7 @@ import * as React from 'react';
 
 import Chapter02 from './components/chapters/chapter02';
 import Chapter03 from './components/chapters/chapter03';
+import Chapter04 from './components/chapters/chapter04';
 
 type ChapterPanelProps = {
   children: React.ReactNode;
@@ -54,7 +55,7 @@ function getChapterPanelProps(
 export default function App() {
   const [value, setValue] = React.useState(0);
 
-  const chapters = [<Chapter03 />, <Chapter02 />];
+  const chapters = [<Chapter04 />, <Chapter03 />, <Chapter02 />];
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

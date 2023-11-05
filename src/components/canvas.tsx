@@ -11,8 +11,8 @@ export default function Canvas({ grid, cellSize = 32 }: CanvasProps) {
   const width = cellSize * grid.columns + 1;
   const height = cellSize * grid.rows + 1;
 
-  const backgroundColor = '#000';
-  const strokeStyle = '#fff';
+  const backgroundColor = '#fff';
+  const strokeStyle = '#000';
 
   const ref = useRef<HTMLCanvasElement>(null);
 

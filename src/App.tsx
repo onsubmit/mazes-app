@@ -68,7 +68,9 @@ export default function App() {
       </Box>
       {chapters.map((chapter, i) => {
         const chapterNumber = chapters.length + 1 - i;
-        return <ChapterPanel {...getChapterPanelProps(value, i, chapterNumber)}>{chapter}</ChapterPanel>;
+        return (
+          <ChapterPanel {...getChapterPanelProps(value, i, chapterNumber)}>{chapter}</ChapterPanel>
+        );
       })}
     </Box>
   );

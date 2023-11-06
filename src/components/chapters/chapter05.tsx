@@ -4,6 +4,7 @@ import { Button } from '@mui/material';
 import { useRef } from 'react';
 
 import HuntAndKill from '../../algorithms/generation/huntAndKill';
+import RecursiveBacktracker from '../../algorithms/generation/recursiveBacktracker';
 import ColoredGrid from '../../coloredGrid';
 import { getDeadendCounts } from '../../deadendCounts';
 import Canvas from '../canvas';
@@ -17,6 +18,13 @@ export default function Chapter05() {
     huntAndKillGrid.columns / 2
   );
   huntAndKillGrid.setPathStart(huntAndKillGridStart);
+
+  const recursiveBacktrackerGrid = new RecursiveBacktracker().execute(new ColoredGrid(30, 30));
+  const recursiveBacktrackerGridStart = recursiveBacktrackerGrid.getOrThrow(
+    recursiveBacktrackerGrid.rows / 2,
+    recursiveBacktrackerGrid.columns / 2
+  );
+  recursiveBacktrackerGrid.setPathStart(recursiveBacktrackerGridStart);
 
   const reportStatus = () => {
     const pre = preRef.current;
@@ -32,13 +40,21 @@ export default function Chapter05() {
 
   return (
     <>
-      <h1>Colored Grids</h1>
-      <h2>Hunt-and-Kill Demo</h2>
+      <h1>Hunt-and-Kill Demo</h1>
       <div className="row">
         <Canvas grid={huntAndKillGrid} cellSize={16}></Canvas>
         <div>
           <h3>Stats</h3>
           <span>{`Num deadends: ${huntAndKillGrid.getDeadends().length}`}</span>
+        </div>
+      </div>
+
+      <h1>Recursive Backtracker Demo</h1>
+      <div className="row">
+        <Canvas grid={recursiveBacktrackerGrid} cellSize={16}></Canvas>
+        <div>
+          <h3>Stats</h3>
+          <span>{`Num deadends: ${recursiveBacktrackerGrid.getDeadends().length}`}</span>
         </div>
       </div>
 

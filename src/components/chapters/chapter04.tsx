@@ -19,8 +19,7 @@ export default function Chapter04() {
 
   return (
     <>
-      <h1>Colored Grids</h1>
-      <h2>Aldous-Broder Demo</h2>
+      <h1>Aldous-Broder Demo</h1>
       <div className="row">
         <Canvas grid={aldousBroderGrid} cellSize={16}></Canvas>
         <div>
@@ -29,7 +28,7 @@ export default function Chapter04() {
         </div>
       </div>
 
-      <h2>Wilson's Demo</h2>
+      <h1>Wilson's Demo</h1>
       <div className="row">
         <Canvas grid={wilsonsGrid} cellSize={16}></Canvas>
         <div>

@@ -14,12 +14,20 @@ export default function Chapter02() {
       <div className="row">
         <pre>{binaryTreeGrid.toString()}</pre>
         <Canvas grid={binaryTreeGrid}></Canvas>
+        <div>
+          <h3>Stats</h3>
+          <span>{`Num deadends: ${binaryTreeGrid.getDeadends().length}`}</span>
+        </div>
       </div>
 
       <h1>Sidewinder Demo</h1>
       <div className="row">
         <pre>{sidewinderGrid.toString()}</pre>
         <Canvas grid={sidewinderGrid}></Canvas>
+        <div>
+          <h3>Stats</h3>
+          <span>{`Num deadends: ${sidewinderGrid.getDeadends().length}`}</span>
+        </div>
       </div>
     </>
   );

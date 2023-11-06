@@ -48,23 +48,39 @@ export default function Chapter03() {
       <div className="row">
         <pre>{binaryTreeGridUnsolved}</pre>
         <pre>{binaryTreeGridSolved}</pre>
+        <div>
+          <h3>Stats</h3>
+          <span>{`Num deadends: ${binaryTreeGrid.getDeadends().length}`}</span>
+        </div>
       </div>
 
       <h2>Sidewinder Demo</h2>
       <div className="row">
         <pre>{sidewinderGridUnsolved}</pre>
         <pre>{sidewinderGridSolved}</pre>
+        <div>
+          <h3>Stats</h3>
+          <span>{`Num deadends: ${sidewinderGrid.getDeadends().length}`}</span>
+        </div>
       </div>
 
       <h1>Colored Grids</h1>
       <h2>Binary Tree Demo</h2>
       <div className="row">
         <Canvas grid={coloredBinaryTreeGrid} cellSize={16}></Canvas>
+        <div>
+          <h3>Stats</h3>
+          <span>{`Num deadends: ${coloredBinaryTreeGrid.getDeadends().length}`}</span>
+        </div>
       </div>
 
       <h2>Sidewinder Demo</h2>
       <div className="row">
         <Canvas grid={coloredSidewinderGrid} cellSize={16}></Canvas>
+        <div>
+          <h3>Stats</h3>
+          <span>{`Num deadends: ${coloredSidewinderGrid.getDeadends().length}`}</span>
+        </div>
       </div>
     </>
   );

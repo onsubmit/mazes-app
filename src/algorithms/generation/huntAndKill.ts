@@ -16,17 +16,18 @@ export default class HuntAndKill implements MazeGenerator {
         current = neighbor;
       } else {
         current = null;
+
+        grid.forEachCell((cell) => {
+          const visitedNeighbors = cell.neighbors.filter((n) => n.hasLinks);
+          if (!cell.hasLinks && visitedNeighbors.length > 0) {
+            current = cell;
+
+            const neighbor = sample(visitedNeighbors);
+            current.link(neighbor);
+            return false;
+          }
+        });
       }
-
-      grid.forEachCell((cell) => {
-        const visitedNeighbors = cell.neighbors.filter((n) => n.hasLinks);
-        if (!cell.hasLinks && visitedNeighbors.length > 0) {
-          current = cell;
-
-          const neighbor = sample(visitedNeighbors);
-          current.link(neighbor);
-        }
-      });
     }
 
     return grid;

@@ -2,8 +2,8 @@ import Cell from './cell';
 import { randomInteger } from './random';
 
 export type Row = Array<Cell>;
-export type CellCallback = (cell: Cell) => void;
-export type RowCallback = (row: Row) => void;
+export type CellCallback = (cell: Cell) => boolean | void;
+export type RowCallback = (row: Row) => boolean | void;
 
 export default class Grid {
   #rows: number;
@@ -56,15 +56,31 @@ export default class Grid {
     for (let r = 0; r < this.#rows; r++) {
       for (let c = 0; c < this.#columns; c++) {
         const cell = this.getOrThrow(r, c);
-        cb(cell);
+        if (cb(cell) === false) {
+          return;
+        }
       }
     }
   };
 
   forEachRow = (cb: RowCallback) => {
     for (let r = 0; r < this.#rows; r++) {
-      cb(this.#grid[r]!);
+      if (cb(this.#grid[r]!) === false) {
+        return;
+      }
     }
+  };
+
+  getDeadends = (): Array<Cell> => {
+    const deadends: Array<Cell> = [];
+
+    this.forEachCell((cell) => {
+      if (cell.links.length === 1) {
+        deadends.push(cell);
+      }
+    });
+
+    return deadends;
   };
 
   toString = (): string => {

@@ -23,11 +23,19 @@ export default function Chapter04() {
       <h2>Aldous-Broder Demo</h2>
       <div className="row">
         <Canvas grid={aldousBroderGrid} cellSize={16}></Canvas>
+        <div>
+          <h3>Stats</h3>
+          <span>{`Num deadends: ${aldousBroderGrid.getDeadends().length}`}</span>
+        </div>
       </div>
 
       <h2>Wilson's Demo</h2>
       <div className="row">
         <Canvas grid={wilsonsGrid} cellSize={16}></Canvas>
+        <div>
+          <h3>Stats</h3>
+          <span>{`Num deadends: ${wilsonsGrid.getDeadends().length}`}</span>
+        </div>
       </div>
     </>
   );

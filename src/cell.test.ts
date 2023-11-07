@@ -8,8 +8,15 @@ describe('Cell', () => {
     expect(cell.row).toBe(2);
     expect(cell.column).toBe(3);
     expect(cell.hasLinks).toBe(false);
+    expect(cell.isEmpty).toBe(false);
     expect(cell.links).toHaveLength(0);
     expect(cell.neighbors).toHaveLength(0);
+  });
+
+  it('Should support an empty Cell', () => {
+    expect(Cell.empty.row).toBe(-1);
+    expect(Cell.empty.column).toBe(-1);
+    expect(Cell.empty.isEmpty).toBe(true);
   });
 
   it('Should support linking to other cells', () => {

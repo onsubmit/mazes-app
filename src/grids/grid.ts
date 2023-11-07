@@ -6,27 +6,44 @@ export type CellCallback = (cell: Cell) => boolean | void;
 export type RowCallback = (row: Row) => boolean | void;
 
 export default class Grid {
-  #rows: number;
-  #columns: number;
   #grid: Array<Row>;
 
+  protected _rows: number;
+  protected _columns: number;
+
   constructor(rows: number, columns: number) {
-    this.#rows = rows;
-    this.#columns = columns;
-    this.#grid = this.#prepareGrid();
+    this.#grid = this.prepareGrid();
+
+    this._rows = rows;
+    this._columns = columns;
+
     this.#configureCells();
   }
 
   get rows(): number {
-    return this.#rows;
+    return this._rows;
   }
 
   get columns(): number {
-    return this.#columns;
+    return this._columns;
   }
 
   get size(): number {
-    return this.#rows * this.#columns;
+    return this._rows * this._columns;
+  }
+
+  protected prepareGrid() {
+    const grid: Array<Row> = [];
+    for (let r = 0; r < this._rows; r++) {
+      const row: Row = [];
+      for (let c = 0; c < this._columns; c++) {
+        row.push(new Cell(r, c));
+      }
+
+      grid.push(row);
+    }
+
+    return grid;
   }
 
   getCellContents(_cell: Cell): string {
@@ -46,15 +63,15 @@ export default class Grid {
     return cell;
   };
 
-  getRandomCell = (): Cell => {
-    const row = randomInteger(this.#rows);
-    const column = randomInteger(this.#columns);
+  getRandomCell(): Cell {
+    const row = randomInteger(this._rows);
+    const column = randomInteger(this._columns);
     return this.getOrThrow(row, column);
-  };
+  }
 
   forEachCell = (cb: CellCallback) => {
-    for (let r = 0; r < this.#rows; r++) {
-      for (let c = 0; c < this.#columns; c++) {
+    for (let r = 0; r < this._rows; r++) {
+      for (let c = 0; c < this._columns; c++) {
         const cell = this.getOrThrow(r, c);
         if (cb(cell) === false) {
           return;
@@ -64,7 +81,7 @@ export default class Grid {
   };
 
   forEachRow = (cb: RowCallback) => {
-    for (let r = 0; r < this.#rows; r++) {
+    for (let r = 0; r < this._rows; r++) {
       if (cb(this.#grid[r]!) === false) {
         return;
       }
@@ -75,7 +92,7 @@ export default class Grid {
     const deadends: Array<Cell> = [];
 
     this.forEachCell((cell) => {
-      if (cell.links.length === 1) {
+      if (cell?.links.length === 1) {
         deadends.push(cell);
       }
     });
@@ -85,18 +102,18 @@ export default class Grid {
 
   toString = (): string => {
     const lines: string[] = [];
-    lines.push(`+${'---+'.repeat(this.#columns)}`);
+    lines.push(`+${'---+'.repeat(this._columns)}`);
 
-    for (let r = 0; r < this.#rows; r++) {
+    for (let r = 0; r < this._rows; r++) {
       let top = '|';
       let bottom = '+';
 
-      for (let c = 0; c < this.#columns; c++) {
+      for (let c = 0; c < this._columns; c++) {
         const cell = this.getOrThrow(r, c);
-        const eastBoundary = cell.isLinkedTo(cell.east) ? ' ' : '|';
+        const eastBoundary = cell?.isLinkedTo(cell.east) ? ' ' : '|';
         top = [top, this.getCellContents(cell), eastBoundary].join(' ');
 
-        const southBoundary = cell?.isLinkedTo(cell?.south) ? '   ' : '---';
+        const southBoundary = cell?.isLinkedTo(cell.south) ? '   ' : '---';
         bottom = `${bottom}${southBoundary}+`;
       }
 
@@ -107,23 +124,9 @@ export default class Grid {
     return lines.join('\n');
   };
 
-  #prepareGrid = () => {
-    const grid: Array<Row> = [];
-    for (let r = 0; r < this.#rows; r++) {
-      const row: Row = [];
-      for (let c = 0; c < this.#columns; c++) {
-        row.push(new Cell(r, c));
-      }
-
-      grid.push(row);
-    }
-
-    return grid;
-  };
-
   #configureCells = () => {
-    for (let r = 0; r < this.#rows; r++) {
-      for (let c = 0; c < this.#columns; c++) {
+    for (let r = 0; r < this._rows; r++) {
+      for (let c = 0; c < this._columns; c++) {
         const cell = this.getOrThrow(r, c);
         const { row, column } = cell;
 

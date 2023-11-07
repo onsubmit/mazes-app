@@ -12,10 +12,10 @@ export default class Grid {
   protected _columns: number;
 
   constructor(rows: number, columns: number) {
-    this.#grid = this.prepareGrid();
-
     this._rows = rows;
     this._columns = columns;
+
+    this.#grid = this.prepareGrid();
 
     this.#configureCells();
   }

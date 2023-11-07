@@ -5,7 +5,7 @@ import MazeGenerator from './algorithms/generation/mazeGenerator';
 import RecursiveBacktracker from './algorithms/generation/recursiveBacktracker';
 import Sidewinder from './algorithms/generation/sidewinder';
 import Wilsons from './algorithms/generation/wilsons';
-import Grid from './grid';
+import Grid from './grids/grid';
 
 type GetDeadendCountsInput = {
   tries: number;

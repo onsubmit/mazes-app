@@ -2,7 +2,7 @@ import './chapterStyles.scss';
 
 import BinaryTree from '../../algorithms/generation/binaryTree';
 import Sidewinder from '../../algorithms/generation/sidewinder';
-import Grid from '../../grid';
+import Grid from '../../grids/grid';
 import Canvas from '../canvas';
 
 export default function Chapter02() {

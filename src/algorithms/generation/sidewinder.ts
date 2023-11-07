@@ -1,5 +1,5 @@
 import Cell from '../../cell';
-import Grid, { Row } from '../../grid';
+import Grid, { Row } from '../../grids/grid';
 import { randomBoolean, sample } from '../../random';
 import MazeGenerator from './mazeGenerator';
 

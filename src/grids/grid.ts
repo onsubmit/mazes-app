@@ -1,5 +1,5 @@
-import Cell from './cell';
-import { randomInteger } from './random';
+import Cell from '../cell';
+import { randomInteger } from '../random';
 
 export type Row = Array<Cell>;
 export type CellCallback = (cell: Cell) => boolean | void;

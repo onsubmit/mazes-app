@@ -1,6 +1,6 @@
 import Cell from './cell';
-import DistanceGrid from './distanceGrid';
 import Distances from './distances';
+import DistanceGrid from './grids/distanceGrid';
 
 export default class ColoredGrid extends DistanceGrid {
   #myDistances: Distances | undefined;

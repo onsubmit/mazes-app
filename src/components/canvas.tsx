@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-import Grid from '../grid';
+import Grid from '../grids/grid';
 
 type CanvasProps = {
   grid: Grid;

@@ -11,6 +11,14 @@ export default class Mask {
     this.#bits = Array.from(Array(rows), () => Array.from(Array(columns), () => true));
   }
 
+  get rows(): number {
+    return this.#rows;
+  }
+
+  get columns(): number {
+    return this.#columns;
+  }
+
   get count(): number {
     let count = 0;
 

@@ -11,6 +11,20 @@ export default class Mask {
     this.#bits = Array.from(Array(rows), () => Array.from(Array(columns), () => true));
   }
 
+  get count(): number {
+    let count = 0;
+
+    for (let row = 0; row < this.#rows; row++) {
+      for (let column = 0; column < this.#columns; column++) {
+        if (this.get(row, column)) {
+          count += 1;
+        }
+      }
+    }
+
+    return count;
+  }
+
   get = (row: number, column: number): boolean => {
     if (this.#bits[row]?.[column] === undefined) {
       throw new Error(`Invalid index: (${row}, ${column})`);
@@ -27,21 +41,7 @@ export default class Mask {
     this.#bits[row]![column] = isOn;
   };
 
-  get count(): number {
-    let count = 0;
-
-    for (let row = 0; row < this.#rows; row++) {
-      for (let column = 0; column < this.#columns; column++) {
-        if (this.get(row, column)) {
-          count += 1;
-        }
-      }
-    }
-
-    return count;
-  }
-
-  getRandomOnLocation(): { row: number; column: number } {
+  getRandomOnLocation = (): { row: number; column: number } => {
     const availableIndices: Array<{ row: number; column: number }> = [];
     for (let row = 0; row < this.#rows; row++) {
       for (let column = 0; column < this.#columns; column++) {
@@ -56,5 +56,5 @@ export default class Mask {
     }
 
     return sample(availableIndices);
-  }
+  };
 }

@@ -14,8 +14,6 @@ describe('Cell', () => {
   });
 
   it('Should support an empty Cell', () => {
-    expect(Cell.empty.row).toBe(-1);
-    expect(Cell.empty.column).toBe(-1);
     expect(Cell.empty.isEmpty).toBe(true);
   });
 

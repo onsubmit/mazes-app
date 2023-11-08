@@ -2,20 +2,27 @@ import Cell from '../cell';
 import { randomInteger } from '../random';
 
 export type Row = Array<Cell>;
+export type GetInitialCellValueCallback = (row: number, column: number) => Cell;
 export type CellCallback = (cell: Cell) => boolean | void;
 export type RowCallback = (row: Row) => boolean | void;
 
 export default class Grid {
+  #getInitialCellValue: GetInitialCellValueCallback;
   #grid: Array<Row>;
 
   protected _rows: number;
   protected _columns: number;
 
-  constructor(rows: number, columns: number) {
+  constructor(
+    rows: number,
+    columns: number,
+    getInitialCellValue: GetInitialCellValueCallback = (r, c) => new Cell(r, c)
+  ) {
     this._rows = rows;
     this._columns = columns;
 
-    this.#grid = this.prepareGrid();
+    this.#getInitialCellValue = getInitialCellValue;
+    this.#grid = this.#prepareGrid();
 
     this.#configureCells();
   }
@@ -30,20 +37,6 @@ export default class Grid {
 
   get size(): number {
     return this._rows * this._columns;
-  }
-
-  protected prepareGrid() {
-    const grid: Array<Row> = [];
-    for (let r = 0; r < this._rows; r++) {
-      const row: Row = [];
-      for (let c = 0; c < this._columns; c++) {
-        row.push(new Cell(r, c));
-      }
-
-      grid.push(row);
-    }
-
-    return grid;
   }
 
   getCellContents(_cell: Cell): string {
@@ -122,6 +115,20 @@ export default class Grid {
     }
 
     return lines.join('\n');
+  };
+
+  #prepareGrid = () => {
+    const grid: Array<Row> = [];
+    for (let r = 0; r < this._rows; r++) {
+      const row: Row = [];
+      for (let c = 0; c < this._columns; c++) {
+        row.push(this.#getInitialCellValue(r, c));
+      }
+
+      grid.push(row);
+    }
+
+    return grid;
   };
 
   #configureCells = () => {

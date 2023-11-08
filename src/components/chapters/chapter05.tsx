@@ -5,8 +5,8 @@ import { useRef } from 'react';
 
 import HuntAndKill from '../../algorithms/generation/huntAndKill';
 import RecursiveBacktracker from '../../algorithms/generation/recursiveBacktracker';
-import ColoredGrid from '../../coloredGrid';
 import { getDeadendCounts } from '../../deadendCounts';
+import ColoredGrid from '../../grids/coloredGrid';
 import Canvas from '../canvas';
 
 export default function Chapter05() {

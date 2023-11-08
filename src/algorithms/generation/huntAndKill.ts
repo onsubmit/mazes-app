@@ -17,7 +17,7 @@ export default class HuntAndKill implements MazeGenerator {
       } else {
         current = null;
 
-        grid.forEachCell((cell) => {
+        grid.forEachCell(({ cell }) => {
           const visitedNeighbors = cell.neighbors.filter((n) => n.hasLinks);
           if (!cell.hasLinks && visitedNeighbors.length > 0) {
             current = cell;

@@ -11,6 +11,30 @@ export default class Mask {
     this.#bits = Array.from(Array(rows), () => Array.from(Array(columns), () => true));
   }
 
+  static fromText = (value: string): Mask => {
+    value = value.toLocaleUpperCase().trim();
+    if (!value) {
+      throw new Error('Empty text value');
+    }
+
+    const lines = value.split(/\r?\n|\r|\n/g);
+    if (lines.some((l) => [...l].some((c) => c !== 'X' && c !== '.'))) {
+      throw new Error('String must only contain Xs and periods');
+    }
+
+    const rows = lines.length;
+    const columns = lines[0]?.length ?? 0;
+
+    const mask = new Mask(rows, columns);
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < columns; c++) {
+        mask.set(r, c, lines[r]?.[c] === 'X' ? false : true);
+      }
+    }
+
+    return mask;
+  };
+
   get rows(): number {
     return this.#rows;
   }

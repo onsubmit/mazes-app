@@ -3,7 +3,7 @@ import { randomInteger } from '../random';
 
 export type Row = Array<Cell>;
 export type GetInitialCellValueCallback = (row: number, column: number) => Cell;
-export type CellCallback = (cell: Cell) => boolean | void;
+export type CellCallback = (input: { row: number; column: number; cell: Cell }) => boolean | void;
 export type RowCallback = (row: Row) => boolean | void;
 
 export default class Grid {
@@ -66,7 +66,7 @@ export default class Grid {
     for (let r = 0; r < this._rows; r++) {
       for (let c = 0; c < this._columns; c++) {
         const cell = this.getOrThrow(r, c);
-        if (cb(cell) === false) {
+        if (cb({ row: r, column: c, cell }) === false) {
           return;
         }
       }
@@ -84,7 +84,7 @@ export default class Grid {
   getDeadends = (): Array<Cell> => {
     const deadends: Array<Cell> = [];
 
-    this.forEachCell((cell) => {
+    this.forEachCell(({ cell }) => {
       if (cell?.links.length === 1) {
         deadends.push(cell);
       }

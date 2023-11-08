@@ -6,7 +6,7 @@ import MazeGenerator from './mazeGenerator';
 export default class Wilsons implements MazeGenerator {
   execute = <T extends Grid>(grid: T): T => {
     const unvisited: Set<Cell> = new Set();
-    grid.forEachCell((cell) => {
+    grid.forEachCell(({ cell }) => {
       unvisited.add(cell);
     });
 

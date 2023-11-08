@@ -2,7 +2,7 @@ import './chapterStyles.scss';
 
 import AldousBroder from '../../algorithms/generation/aldousBroder';
 import Wilsons from '../../algorithms/generation/wilsons';
-import ColoredGrid from '../../coloredGrid';
+import ColoredGrid from '../../grids/coloredGrid';
 import Canvas from '../canvas';
 
 export default function Chapter04() {

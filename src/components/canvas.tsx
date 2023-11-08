@@ -12,6 +12,7 @@ export default function Canvas({ grid, cellSize = 32 }: CanvasProps) {
   const height = cellSize * grid.rows + 1;
 
   const backgroundColor = '#fff';
+  const backgroundColorEmptyCell = '#000';
   const strokeStyle = '#000';
 
   const ref = useRef<HTMLCanvasElement>(null);
@@ -45,18 +46,18 @@ export default function Canvas({ grid, cellSize = 32 }: CanvasProps) {
     };
 
     for (const mode of ['backgrounds', 'walls'] as const) {
-      grid.forEachCell((cell) => {
-        const x1 = cell.column * cellSize;
-        const y1 = cell.row * cellSize;
-        const x2 = (cell.column + 1) * cellSize;
-        const y2 = (cell.row + 1) * cellSize;
+      grid.forEachCell(({ row, column, cell }) => {
+        const x1 = column * cellSize;
+        const y1 = row * cellSize;
+        const x2 = (column + 1) * cellSize;
+        const y2 = (row + 1) * cellSize;
 
         switch (mode) {
           case 'backgrounds': {
-            const color = grid.getCellBackgroundColor(cell);
-            if (color) {
-              drawRectangle(x1, y1, x2, y2, color);
-            }
+            const color = cell.isEmpty
+              ? backgroundColorEmptyCell
+              : grid.getCellBackgroundColor(cell) ?? backgroundColor;
+            drawRectangle(x1, y1, x2, y2, color);
 
             break;
           }

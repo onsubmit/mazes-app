@@ -2,7 +2,7 @@ import './chapterStyles.scss';
 
 import BinaryTree from '../../algorithms/generation/binaryTree';
 import Sidewinder from '../../algorithms/generation/sidewinder';
-import ColoredGrid from '../../coloredGrid';
+import ColoredGrid from '../../grids/coloredGrid';
 import DistanceGrid from '../../grids/distanceGrid';
 import Canvas from '../canvas';
 

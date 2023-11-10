@@ -105,15 +105,7 @@ export default function Chapter06() {
             />
           </div>
         </div>
-        {maskedGridFromImage && (
-          <>
-            <Canvas grid={maskedGridFromImage} cellSize={4}></Canvas>
-            <div>
-              <h3>Stats</h3>
-              <span>{`Num deadends: ${maskedGridFromImage.getDeadends().length}`}</span>
-            </div>
-          </>
-        )}
+        {maskedGridFromImage && <Canvas grid={maskedGridFromImage} cellSize={4}></Canvas>}
       </div>
     </>
   );

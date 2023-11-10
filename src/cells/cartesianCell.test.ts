@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import CartesianCell from './cartesianCell';
 
-describe('Cell', () => {
+describe('CartesianCell', () => {
   it('Should initialize a basic Cell', () => {
     const cell = new CartesianCell(2, 3);
     expect(cell.row).toBe(2);

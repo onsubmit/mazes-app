@@ -1,3 +1,4 @@
+import CanvasRenderingContextHelper from '../canvasRenderingContextHelper';
 import Cell from '../cell';
 import { randomInteger } from '../random';
 
@@ -46,31 +47,11 @@ export default class Grid {
   getCellBackgroundColor(_cell: Cell): string | void {}
 
   draw(canvas: HTMLCanvasElement, cellSize: number): void {
-    const context = canvas.getContext('2d');
-    if (!context) {
-      throw new Error('Could not get rendering context');
-    }
-
     const backgroundColor = '#fff';
     const backgroundColorEmptyCell = '#000';
     const strokeStyle = '#000';
 
-    context.fillStyle = backgroundColor;
-    context.strokeStyle = strokeStyle;
-    context.fillRect(0, 0, canvas.width, canvas.height);
-
-    const drawLine = (x1: number, y1: number, x2: number, y2: number) => {
-      context.beginPath();
-      context.moveTo(x1, y1);
-      context.lineTo(x2, y2);
-      context.stroke();
-    };
-
-    const drawRectangle = (x1: number, y1: number, x2: number, y2: number, color: string) => {
-      context.fillStyle = color;
-      context.fillRect(x1, y1, x2, y2);
-      context.fillStyle = backgroundColor;
-    };
+    const helper = new CanvasRenderingContextHelper(canvas, backgroundColor, strokeStyle);
 
     for (const mode of ['backgrounds', 'walls'] as const) {
       this.forEachCell(({ row, column, cell }) => {
@@ -84,25 +65,25 @@ export default class Grid {
             const color = cell.isEmpty
               ? backgroundColorEmptyCell
               : this.getCellBackgroundColor(cell) ?? backgroundColor;
-            drawRectangle(x1, y1, x2, y2, color);
+            helper.drawRectangle(x1, y1, x2, y2, color);
 
             break;
           }
           case 'walls': {
             if (!cell.north) {
-              drawLine(x1, y1, x2, y1);
+              helper.drawLine(x1, y1, x2, y1);
             }
 
             if (!cell.west) {
-              drawLine(x1, y1, x1, y2);
+              helper.drawLine(x1, y1, x1, y2);
             }
 
             if (!cell.isLinkedTo(cell.east)) {
-              drawLine(x2, y1, x2, y2);
+              helper.drawLine(x2, y1, x2, y2);
             }
 
             if (!cell.isLinkedTo(cell.south)) {
-              drawLine(x1, y2, x2, y2);
+              helper.drawLine(x1, y2, x2, y2);
             }
 
             break;

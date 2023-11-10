@@ -1,14 +1,15 @@
 import './chapterStyles.scss';
 
-import { Button } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
+import { Box, Button } from '@mui/material';
+import { useEffect, useState } from 'react';
 
 import RecursiveBacktracker from '../../algorithms/generation/recursiveBacktracker';
+import ImageMaskPng from '../../assets/image-mask.png';
 import MaskedGrid from '../../grids/maskedGrid';
 import Mask from '../../mask';
 import Canvas from '../canvas';
 
-const MASK_TEXT_EXAMPLE = `
+const TEXT_MASK_EXAMPLE = `
 X........X
 ....XX....
 ...XXXX...
@@ -22,8 +23,9 @@ X........X
 `.trim();
 
 export default function Chapter06() {
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const [textMaskValue, setTextMaskValue] = useState<string>(TEXT_MASK_EXAMPLE);
   const [maskedGridFromText, setMaskedGridFromText] = useState<MaskedGrid | undefined>();
+  const [maskedGridFromImage, setMaskedGridFromImage] = useState<MaskedGrid | undefined>();
 
   const mask = new Mask(5, 5);
   mask.set(0, 0, false);
@@ -33,17 +35,25 @@ export default function Chapter06() {
   const maskedGrid = new MaskedGrid(mask);
   new RecursiveBacktracker().execute(maskedGrid);
 
-  const generateMask = () => {
-    const textArea = textAreaRef.current;
-    if (!textArea) return;
-
-    const mask = Mask.fromText(textArea.value);
+  const generateTextMask = () => {
+    const mask = Mask.fromText(textMaskValue);
     const maskedGrid = new MaskedGrid(mask);
     new RecursiveBacktracker().execute(maskedGrid);
     setMaskedGridFromText(maskedGrid);
   };
 
-  useEffect(generateMask, []);
+  const generateImageMask = async () => {
+    const mask = await Mask.fromImageAsync(ImageMaskPng);
+    const maskedGrid = new MaskedGrid(mask);
+    new RecursiveBacktracker().execute(maskedGrid);
+    setMaskedGridFromImage(maskedGrid);
+  };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- Only generate once on component render
+  useEffect(generateTextMask, []);
+  useEffect(() => {
+    generateImageMask();
+  }, []);
 
   return (
     <>
@@ -60,9 +70,12 @@ export default function Chapter06() {
       <div className="row">
         <div>
           <div>
-            <textarea ref={textAreaRef} defaultValue={MASK_TEXT_EXAMPLE}></textarea>
+            <textarea
+              onChange={(e) => setTextMaskValue(e.currentTarget.value)}
+              defaultValue={TEXT_MASK_EXAMPLE}
+            ></textarea>
           </div>
-          <Button onClick={generateMask} variant="contained">
+          <Button onClick={generateTextMask} variant="contained">
             Generate mask
           </Button>
         </div>
@@ -72,6 +85,32 @@ export default function Chapter06() {
             <div>
               <h3>Stats</h3>
               <span>{`Num deadends: ${maskedGridFromText.getDeadends().length}`}</span>
+            </div>
+          </>
+        )}
+      </div>
+
+      <h1>Image Mask Demo</h1>
+      <div className="row">
+        <div>
+          <div>
+            <Box
+              component="img"
+              sx={{
+                width: 84,
+                height: 50,
+              }}
+              alt="The house from the offer."
+              src={ImageMaskPng}
+            />
+          </div>
+        </div>
+        {maskedGridFromImage && (
+          <>
+            <Canvas grid={maskedGridFromImage} cellSize={4}></Canvas>
+            <div>
+              <h3>Stats</h3>
+              <span>{`Num deadends: ${maskedGridFromImage.getDeadends().length}`}</span>
             </div>
           </>
         )}

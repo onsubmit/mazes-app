@@ -35,6 +35,51 @@ export default class Mask {
     return mask;
   };
 
+  static fromImageAsync = (url: string): Promise<Mask> => {
+    const image = new Image();
+
+    return new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        reject('Image did not load within 5 seconds');
+      }, 5000);
+
+      image.onload = function () {
+        clearTimeout(timeout);
+
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        if (!context) {
+          throw new Error('Could not get rendering context');
+        }
+
+        const rows = image.height;
+        const columns = image.width;
+
+        context.drawImage(image, 0, 0, image.width, image.height);
+
+        const mask = new Mask(rows, columns);
+        const data = context.getImageData(0, 0, image.width, image.height).data;
+
+        let i = 0;
+        for (let row = 0; row < rows; row++) {
+          for (let column = 0; column < columns; column++) {
+            const red = data[i++];
+            const green = data[i++];
+            const blue = data[i++];
+            const alpha = data[i++];
+
+            const isWhite = red === 255 && green === 255 && blue === 255 && alpha === 255;
+            mask.set(row, column, isWhite);
+          }
+        }
+
+        resolve(mask);
+      };
+
+      image.src = url;
+    });
+  };
+
   get rows(): number {
     return this.#rows;
   }

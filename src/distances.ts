@@ -1,4 +1,4 @@
-import Cell from './cell';
+import Cell from './cells/cell';
 
 type CellNumberMap = Map<Cell, number>;
 

@@ -1,4 +1,4 @@
-import Cell from '../cell';
+import Cell from '../cells/cell';
 import Distances from '../distances';
 import Grid from './grid';
 

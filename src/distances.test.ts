@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import Cell from './cell';
+import Cell from './cells/cell';
 import Distances from './distances';
 
 describe('Distances', () => {

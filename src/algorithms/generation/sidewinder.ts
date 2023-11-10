@@ -1,4 +1,4 @@
-import Cell from '../../cell';
+import Cell from '../../cells/cell';
 import Grid, { Row } from '../../grids/grid';
 import { randomBoolean, sample } from '../../random';
 import MazeGenerator from './mazeGenerator';

@@ -1,5 +1,5 @@
 import CanvasRenderingContextHelper from '../canvasRenderingContextHelper';
-import Cell from '../cell';
+import Cell from '../cells/cell';
 import { randomInteger } from '../random';
 
 export type Row = Array<Cell>;

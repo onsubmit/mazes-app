@@ -1,4 +1,4 @@
-import Distances from './distances';
+import Distances from '../distances';
 
 export default class Cell {
   #row: number;

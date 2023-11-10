@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import CartesianCell from './cartesianCell';
 
 describe('CartesianCell', () => {
-  it('Should initialize a basic Cell', () => {
+  it('Should initialize a basic CartesianCell', () => {
     const cell = new CartesianCell(2, 3);
     expect(cell.row).toBe(2);
     expect(cell.column).toBe(3);
@@ -13,7 +13,7 @@ describe('CartesianCell', () => {
     expect(cell.neighbors).toHaveLength(0);
   });
 
-  it('Should support an empty Cell', () => {
+  it('Should support an empty CartesianCell', () => {
     expect(CartesianCell.empty.isEmpty).toBe(true);
   });
 

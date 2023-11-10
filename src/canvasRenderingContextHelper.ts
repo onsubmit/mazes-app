@@ -30,6 +30,7 @@ export default class CanvasRenderingContextHelper {
   };
 
   drawCircle = (x: number, y: number, radius: number) => {
-    this.#context.arc(x, y, radius, 0, twoPi, false);
+    this.#context.arc(x, y, radius, 0, twoPi);
+    this.#context.stroke();
   };
 }

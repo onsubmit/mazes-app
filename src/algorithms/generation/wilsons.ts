@@ -1,11 +1,11 @@
-import Cell from '../../cells/cell';
-import Grid from '../../grids/grid';
+import CartesianCell from '../../cells/cartesianCell';
+import CartesianGrid from '../../grids/cartesianGrid';
 import { sample } from '../../random';
-import MazeGenerator from './mazeGenerator';
+import { MazeGeneratorCartesianGrid } from './mazeGenerator';
 
-export default class Wilsons implements MazeGenerator {
-  execute = <T extends Grid>(grid: T): T => {
-    const unvisited: Set<Cell> = new Set();
+export default class Wilsons implements MazeGeneratorCartesianGrid {
+  execute = <TGrid extends CartesianGrid>(grid: TGrid): TGrid => {
+    const unvisited: Set<CartesianCell> = new Set();
     grid.forEachCell(({ cell }) => {
       unvisited.add(cell);
     });

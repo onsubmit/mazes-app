@@ -100,7 +100,7 @@ export default function Chapter06() {
                 width: 84,
                 height: 50,
               }}
-              alt="The house from the offer."
+              alt="andy's mazes"
               src={ImageMaskPng}
             />
           </div>

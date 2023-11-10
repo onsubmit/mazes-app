@@ -1,13 +1,14 @@
 import { useEffect, useRef } from 'react';
 
+import Cell from '../cells/cell';
 import Grid from '../grids/grid';
 
-type CanvasProps = {
-  grid: Grid;
+type CanvasProps<T extends Cell> = {
+  grid: Grid<T>;
   cellSize?: number;
 };
 
-export default function Canvas({ grid, cellSize = 32 }: CanvasProps) {
+export default function Canvas<T extends Cell>({ grid, cellSize = 32 }: CanvasProps<T>) {
   const width = cellSize * grid.columns + 1;
   const height = cellSize * grid.rows + 1;
 

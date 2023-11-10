@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
-import Cell from './cells/cell';
+import CartesianCell from './cells/cartesianCell';
 import Distances from './distances';
 
 describe('Distances', () => {
   it('Should initialize a basic Distances', () => {
-    const root = new Cell(2, 3);
+    const root = new CartesianCell(2, 3);
     const distances = new Distances(root);
 
     const distance = distances.getOrThrow(root);
@@ -13,7 +13,7 @@ describe('Distances', () => {
   });
 
   it('Should allow for iterating over the cells', () => {
-    const root = new Cell(2, 3);
+    const root = new CartesianCell(2, 3);
     const distances = new Distances(root);
 
     for (const cell of distances.cells) {

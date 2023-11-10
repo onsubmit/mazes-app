@@ -1,9 +1,10 @@
+import CartesianCell from '../cells/cartesianCell';
 import Cell from '../cells/cell';
 import Distances from '../distances';
 import DistanceGrid from './distanceGrid';
 
 export default class ColoredGrid extends DistanceGrid {
-  #myDistances: Distances | undefined;
+  #myDistances: Distances<CartesianCell> | undefined;
   #farthest: Cell | undefined;
   #maximum: number | undefined;
 
@@ -11,14 +12,14 @@ export default class ColoredGrid extends DistanceGrid {
     super(rows, columns);
   }
 
-  override onSetDistances(distances: Distances): void {
+  override onSetDistances(distances: Distances<CartesianCell>): void {
     this.#myDistances = distances;
     const { cell, distance } = distances.getFurthestCell();
     this.#farthest = cell;
     this.#maximum = distance;
   }
 
-  override getCellBackgroundColor(cell: Cell): string | void {
+  override getCellBackgroundColor(cell: CartesianCell): string | void {
     if (!this.#myDistances?.has(cell)) {
       return;
     }

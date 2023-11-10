@@ -9,7 +9,7 @@ import Canvas from '../canvas';
 export default function Chapter03() {
   const binaryTreeGrid = new BinaryTree().execute(new DistanceGrid(10, 10));
   const binaryTreeGridStart = binaryTreeGrid.getOrThrow(0, 0);
-  const binaryTreeGridEnd = binaryTreeGridStart.distances.getFurthestCell().cell;
+  const binaryTreeGridEnd = binaryTreeGridStart.getDistances().getFurthestCell().cell;
 
   binaryTreeGrid.setPathStart(binaryTreeGridStart);
   const binaryTreeGridUnsolved = binaryTreeGrid.toString();
@@ -19,7 +19,7 @@ export default function Chapter03() {
 
   const sidewinderGrid = new Sidewinder().execute(new DistanceGrid(10, 10));
   const sidewinderGridStart = sidewinderGrid.getOrThrow(0, 0);
-  const sidewinderGridEnd = sidewinderGridStart.distances.getFurthestCell().cell;
+  const sidewinderGridEnd = sidewinderGridStart.getDistances().getFurthestCell().cell;
 
   sidewinderGrid.setPathStart(sidewinderGridStart);
   const sidewinderGridUnsolved = sidewinderGrid.toString();

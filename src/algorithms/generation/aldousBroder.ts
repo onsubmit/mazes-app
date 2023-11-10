@@ -1,9 +1,9 @@
-import Grid from '../../grids/grid';
+import CartesianGrid from '../../grids/cartesianGrid';
 import { sample } from '../../random';
-import MazeGenerator from './mazeGenerator';
+import { MazeGeneratorCartesianGrid } from './mazeGenerator';
 
-export default class AldousBroder implements MazeGenerator {
-  execute = <T extends Grid>(grid: T): T => {
+export default class AldousBroder implements MazeGeneratorCartesianGrid {
+  execute = <TGrid extends CartesianGrid>(grid: TGrid): TGrid => {
     let cell = grid.getRandomCell();
     let numUnvisited = grid.size - 1;
 

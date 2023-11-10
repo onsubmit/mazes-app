@@ -1,21 +1,21 @@
 import Cell from './cells/cell';
 
-type CellNumberMap = Map<Cell, number>;
+type CellNumberMap<T extends Cell> = Map<T, number>;
 
-export default class Distances {
-  #root: Cell;
-  #cells: CellNumberMap;
+export default class Distances<T extends Cell> {
+  #root: T;
+  #cells: CellNumberMap<T>;
 
-  constructor(root: Cell) {
+  constructor(root: T) {
     this.#root = root;
     this.#cells = new Map([[root, 0]]);
   }
 
-  get cells(): IterableIterator<Cell> {
+  get cells(): IterableIterator<T> {
     return this.#cells.keys();
   }
 
-  getOrThrow = (cell: Cell): number => {
+  getOrThrow = (cell: T): number => {
     const distance = this.#cells.get(cell);
     if (distance === undefined) {
       throw new Error('Cell not found.');
@@ -24,13 +24,13 @@ export default class Distances {
     return distance;
   };
 
-  has = (cell: Cell): boolean => this.#cells.has(cell);
-  set = (cell: Cell, distance: number): CellNumberMap => this.#cells.set(cell, distance);
+  has = (cell: T): boolean => this.#cells.has(cell);
+  set = (cell: T, distance: number): CellNumberMap<T> => this.#cells.set(cell, distance);
 
-  getPathTo = (goal: Cell): Distances => {
+  getPathTo = (goal: T): Distances<T> => {
     let current = goal;
 
-    const breadcrumbs = new Distances(this.#root);
+    const breadcrumbs = new Distances<T>(this.#root);
     breadcrumbs.set(current, this.getOrThrow(current));
 
     while (current !== this.#root) {
@@ -49,7 +49,7 @@ export default class Distances {
     return breadcrumbs;
   };
 
-  getFurthestCell = (): { cell: Cell; distance: number } => {
+  getFurthestCell = (): { cell: T; distance: number } => {
     let maxDistance = 0;
     let maxCell = this.#root;
 

@@ -1,15 +1,15 @@
-import Cell from '../cells/cell';
+import CartesianCell from '../cells/cartesianCell';
 import Distances from '../distances';
-import Grid from './grid';
+import CartesianGrid from './cartesianGrid';
 
-export default class DistanceGrid extends Grid {
-  protected distances: Distances | undefined;
+export default class DistanceGrid extends CartesianGrid {
+  protected distances: Distances<CartesianCell> | undefined;
 
   constructor(rows: number, columns: number) {
     super(rows, columns);
   }
 
-  override getCellContents(cell: Cell): string {
+  override getCellContents(cell: CartesianCell): string {
     if (this.distances?.has(cell)) {
       return this.distances.getOrThrow(cell).toString(36).toUpperCase();
     }
@@ -17,14 +17,14 @@ export default class DistanceGrid extends Grid {
     return super.getCellContents(cell);
   }
 
-  onSetDistances(_distances: Distances): void {}
+  onSetDistances(_distances: Distances<CartesianCell>): void {}
 
-  setPathStart = (cell: Cell) => {
-    this.distances = cell.distances;
+  setPathStart = (cell: CartesianCell) => {
+    this.distances = cell.getDistances();
     this.onSetDistances(this.distances);
   };
 
-  setPathEnd = (cell: Cell) => {
+  setPathEnd = (cell: CartesianCell) => {
     if (!this.distances) {
       throw new Error('Path start not set yet.');
     }

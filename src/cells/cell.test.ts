@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import Cell from './cell';
+import CartesianCell from './cartesianCell';
 
 describe('Cell', () => {
   it('Should initialize a basic Cell', () => {
-    const cell = new Cell(2, 3);
+    const cell = new CartesianCell(2, 3);
     expect(cell.row).toBe(2);
     expect(cell.column).toBe(3);
     expect(cell.hasLinks).toBe(false);
@@ -14,12 +14,12 @@ describe('Cell', () => {
   });
 
   it('Should support an empty Cell', () => {
-    expect(Cell.empty.isEmpty).toBe(true);
+    expect(CartesianCell.empty.isEmpty).toBe(true);
   });
 
   it('Should support linking to other cells', () => {
-    const cell = new Cell(5, 5);
-    const link = new Cell(4, 5);
+    const cell = new CartesianCell(5, 5);
+    const link = new CartesianCell(4, 5);
     cell.link(link);
     expect(cell.hasLinks).toBe(true);
     expect(cell.links).toHaveLength(1);
@@ -28,8 +28,8 @@ describe('Cell', () => {
   });
 
   it('Should support unidirectional linking to other cells', () => {
-    const cell = new Cell(5, 5);
-    const link = new Cell(4, 5);
+    const cell = new CartesianCell(5, 5);
+    const link = new CartesianCell(4, 5);
     cell.link(link, { bidi: false });
     expect(cell.hasLinks).toBe(true);
     expect(cell.links).toHaveLength(1);
@@ -38,8 +38,8 @@ describe('Cell', () => {
   });
 
   it('Should support unlinking', () => {
-    const cell = new Cell(5, 5);
-    const link = new Cell(4, 5);
+    const cell = new CartesianCell(5, 5);
+    const link = new CartesianCell(4, 5);
     cell.link(link);
     expect(cell.hasLinks).toBe(true);
     expect(cell.links).toHaveLength(1);

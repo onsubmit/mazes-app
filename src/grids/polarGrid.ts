@@ -1,8 +1,8 @@
 import CanvasRenderingContextHelper from '../canvasRenderingContextHelper';
 import { cos, sin, twoPi } from '../math';
-import Grid from './grid';
+import CartesianGrid from './cartesianGrid';
 
-export default class PolarGrid extends Grid {
+export default class PolarGrid extends CartesianGrid {
   override draw(canvas: HTMLCanvasElement, cellSize: number) {
     const backgroundColor = '#fff';
     const strokeStyle = '#000';

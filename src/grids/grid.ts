@@ -1,31 +1,30 @@
-import CanvasRenderingContextHelper from '../canvasRenderingContextHelper';
 import Cell from '../cells/cell';
 import { randomInteger } from '../random';
 
-export type Row = Array<Cell>;
-export type GetInitialCellValueCallback = (row: number, column: number) => Cell;
-export type CellCallback = (input: { row: number; column: number; cell: Cell }) => boolean | void;
-export type RowCallback = (row: Row) => boolean | void;
+export type Row<T extends Cell> = Array<T>;
+export type GetInitialCellValueCallback<T extends Cell> = (row: number, column: number) => T;
+export type CellCallback<T extends Cell> = (input: {
+  row: number;
+  column: number;
+  cell: T;
+}) => boolean | void;
+export type RowCallback<T extends Cell> = (row: Row<T>) => boolean | void;
 
-export default class Grid {
-  #getInitialCellValue: GetInitialCellValueCallback;
-  #grid: Array<Row>;
+export default abstract class Grid<T extends Cell> {
+  #getInitialCellValue: GetInitialCellValueCallback<T>;
+  #grid: Array<Row<T>>;
 
   protected _rows: number;
   protected _columns: number;
 
-  constructor(
-    rows: number,
-    columns: number,
-    getInitialCellValue: GetInitialCellValueCallback = (r, c) => new Cell(r, c)
-  ) {
+  constructor(rows: number, columns: number, getInitialCellValue: GetInitialCellValueCallback<T>) {
     this._rows = rows;
     this._columns = columns;
 
     this.#getInitialCellValue = getInitialCellValue;
     this.#grid = this.#prepareGrid();
 
-    this.#configureCells();
+    this.configureCells();
   }
 
   get rows(): number {
@@ -40,62 +39,21 @@ export default class Grid {
     return this._rows * this._columns;
   }
 
-  getCellContents(_cell: Cell): string {
+  getCellContents(_cell: T): string {
     return ' ';
   }
 
-  getCellBackgroundColor(_cell: Cell): string | void {}
+  protected abstract configureCells(): void;
 
-  draw(canvas: HTMLCanvasElement, cellSize: number): void {
-    const backgroundColor = '#fff';
-    const backgroundColorEmptyCell = '#000';
-    const strokeStyle = '#000';
+  abstract getCellBackgroundColor(_cell: T): string | void;
 
-    const helper = new CanvasRenderingContextHelper(canvas, backgroundColor, strokeStyle);
+  abstract draw(canvas: HTMLCanvasElement, cellSize: number): void;
 
-    for (const mode of ['backgrounds', 'walls'] as const) {
-      this.forEachCell(({ row, column, cell }) => {
-        const x1 = column * cellSize;
-        const y1 = row * cellSize;
-        const x2 = (column + 1) * cellSize;
-        const y2 = (row + 1) * cellSize;
+  abstract toString(): string;
 
-        switch (mode) {
-          case 'backgrounds': {
-            const color = cell.isEmpty
-              ? backgroundColorEmptyCell
-              : this.getCellBackgroundColor(cell) ?? backgroundColor;
-            helper.drawRectangle(x1, y1, x2, y2, color);
+  get = (row: number, column: number): T | undefined => this.#grid[row]?.[column];
 
-            break;
-          }
-          case 'walls': {
-            if (!cell.north) {
-              helper.drawLine(x1, y1, x2, y1);
-            }
-
-            if (!cell.west) {
-              helper.drawLine(x1, y1, x1, y2);
-            }
-
-            if (!cell.isLinkedTo(cell.east)) {
-              helper.drawLine(x2, y1, x2, y2);
-            }
-
-            if (!cell.isLinkedTo(cell.south)) {
-              helper.drawLine(x1, y2, x2, y2);
-            }
-
-            break;
-          }
-        }
-      });
-    }
-  }
-
-  get = (row: number, column: number): Cell | undefined => this.#grid[row]?.[column];
-
-  getOrThrow = (row: number, column: number): Cell => {
+  getOrThrow = (row: number, column: number): T => {
     const cell = this.get(row, column);
     if (!cell) {
       throw new Error(`Invalid index: (${row}, ${column})`);
@@ -104,13 +62,13 @@ export default class Grid {
     return cell;
   };
 
-  getRandomCell(): Cell {
+  getRandomCell(): T {
     const row = randomInteger(this._rows);
     const column = randomInteger(this._columns);
     return this.getOrThrow(row, column);
   }
 
-  forEachCell = (cb: CellCallback) => {
+  forEachCell = (cb: CellCallback<T>) => {
     for (let r = 0; r < this._rows; r++) {
       for (let c = 0; c < this._columns; c++) {
         const cell = this.getOrThrow(r, c);
@@ -121,7 +79,7 @@ export default class Grid {
     }
   };
 
-  forEachRow = (cb: RowCallback) => {
+  forEachRow = (cb: RowCallback<T>) => {
     for (let r = 0; r < this._rows; r++) {
       if (cb(this.#grid[r]!) === false) {
         return;
@@ -129,8 +87,8 @@ export default class Grid {
     }
   };
 
-  getDeadends = (): Array<Cell> => {
-    const deadends: Array<Cell> = [];
+  getDeadends = (): Array<T> => {
+    const deadends: Array<T> = [];
 
     this.forEachCell(({ cell }) => {
       if (cell?.links.length === 1) {
@@ -141,34 +99,10 @@ export default class Grid {
     return deadends;
   };
 
-  toString = (): string => {
-    const lines: string[] = [];
-    lines.push(`+${'---+'.repeat(this._columns)}`);
-
-    for (let r = 0; r < this._rows; r++) {
-      let top = '|';
-      let bottom = '+';
-
-      for (let c = 0; c < this._columns; c++) {
-        const cell = this.getOrThrow(r, c);
-        const eastBoundary = cell?.isLinkedTo(cell.east) ? ' ' : '|';
-        top = [top, this.getCellContents(cell), eastBoundary].join(' ');
-
-        const southBoundary = cell?.isLinkedTo(cell.south) ? '   ' : '---';
-        bottom = `${bottom}${southBoundary}+`;
-      }
-
-      lines.push(top);
-      lines.push(bottom);
-    }
-
-    return lines.join('\n');
-  };
-
   #prepareGrid = () => {
-    const grid: Array<Row> = [];
+    const grid: Array<Row<T>> = [];
     for (let r = 0; r < this._rows; r++) {
-      const row: Row = [];
+      const row: Row<T> = [];
       for (let c = 0; c < this._columns; c++) {
         row.push(this.#getInitialCellValue(r, c));
       }
@@ -177,19 +111,5 @@ export default class Grid {
     }
 
     return grid;
-  };
-
-  #configureCells = () => {
-    for (let r = 0; r < this._rows; r++) {
-      for (let c = 0; c < this._columns; c++) {
-        const cell = this.getOrThrow(r, c);
-        const { row, column } = cell;
-
-        cell.north = this.get(row - 1, column);
-        cell.south = this.get(row + 1, column);
-        cell.west = this.get(row, column - 1);
-        cell.east = this.get(row, column + 1);
-      }
-    }
   };
 }

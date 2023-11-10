@@ -1,28 +1,16 @@
 import Distances from '../distances';
 
-export default class Cell {
+export default abstract class Cell {
   #row: number;
   #column: number;
-  #links: Set<Cell>;
-  #isEmpty = false;
+  #links: Set<this>;
 
-  north?: Cell;
-  south?: Cell;
-  west?: Cell;
-  east?: Cell;
+  protected _isEmpty = false;
 
   constructor(row: number, column: number) {
     this.#row = row;
     this.#column = column;
     this.#links = new Set();
-  }
-
-  static empty = Cell.getEmptyCell();
-
-  private static getEmptyCell() {
-    const empty = new Cell(-1, -1);
-    empty.#isEmpty = true;
-    return empty;
   }
 
   get row(): number {
@@ -33,28 +21,24 @@ export default class Cell {
     return this.#column;
   }
 
-  get links(): Cell[] {
+  get links(): this[] {
     return [...this.#links.keys()];
   }
 
   get isEmpty(): boolean {
-    return this.#isEmpty;
+    return this._isEmpty;
   }
 
   get hasLinks(): boolean {
     return this.#links.size > 0;
   }
 
-  get neighbors(): Cell[] {
-    return [this.north, this.south, this.east, this.west].filter(Boolean);
-  }
-
-  get distances(): Distances {
+  getDistances<T extends Cell>(this: T): Distances<T> {
     const distances = new Distances(this);
-    let frontier: Set<Cell> = new Set([this]);
+    let frontier: Set<T> = new Set([this]);
 
     while (frontier.size) {
-      const newFrontier: Set<Cell> = new Set();
+      const newFrontier: Set<T> = new Set();
 
       for (const cell of frontier) {
         for (const linked of cell.links) {
@@ -73,7 +57,7 @@ export default class Cell {
     return distances;
   }
 
-  link = (cell: Cell | undefined, options = { bidi: true }): this => {
+  link<T extends Cell>(this: T, cell: T | undefined, options = { bidi: true }): T {
     if (!cell) {
       return this;
     }
@@ -84,16 +68,18 @@ export default class Cell {
     }
 
     return this;
-  };
+  }
 
-  unlink = (cell: Cell, options = { bidi: true }): this => {
+  unlink<T extends Cell>(this: T, cell: T, options = { bidi: true }): T {
     this.#links.delete(cell);
     if (options.bidi) {
       cell.unlink(this, { bidi: false });
     }
 
     return this;
-  };
+  }
 
-  isLinkedTo = (cell: Cell | undefined): boolean => (cell ? this.#links.has(cell) : false);
+  isLinkedTo<T extends Cell>(this: T, cell: T | undefined): boolean {
+    return cell ? this.#links.has(cell) : false;
+  }
 }

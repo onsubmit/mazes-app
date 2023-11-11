@@ -1,7 +1,7 @@
 import CartesianCell from '../cells/cartesianCell';
 import Cell from '../cells/cell';
 import Distances from '../distances';
-import DistanceGrid from './distanceGrid';
+import DistanceGrid from './cartesianDistanceGrid';
 
 export default class ColoredGrid extends DistanceGrid {
   #myDistances: Distances<CartesianCell> | undefined;

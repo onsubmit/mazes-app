@@ -2,7 +2,7 @@ import './chapterStyles.scss';
 
 import BinaryTree from '../../algorithms/generation/binaryTree';
 import Sidewinder from '../../algorithms/generation/sidewinder';
-import DistanceGrid from '../../grids/distanceGrid';
+import DistanceGrid from '../../grids/cartesianDistanceGrid';
 import Canvas from '../canvas';
 
 export default function Chapter03() {

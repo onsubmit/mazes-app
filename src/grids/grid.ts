@@ -55,7 +55,9 @@ export default abstract class Grid<T extends Cell> {
 
   abstract toString(): string;
 
-  get = (row: number, column: number): T | undefined => this._grid[row]?.[column];
+  get(row: number, column: number): T | undefined {
+    return this._grid[row]?.[column];
+  }
 
   getOrThrow = (row: number, column: number): T => {
     const cell = this.get(row, column);
@@ -65,6 +67,8 @@ export default abstract class Grid<T extends Cell> {
 
     return cell;
   };
+
+  getRow = (row: number): Row<T> | undefined => this._grid[row];
 
   getRowOrThrow = (row: number): Row<T> => {
     const r = this._grid[row];

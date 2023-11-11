@@ -1,6 +1,6 @@
 import CanvasRenderingContextHelper from '../canvasRenderingContextHelper';
 import PolarCell from '../cells/polarCell';
-import { cos, sin, twoPi } from '../math';
+import { cos, modulo, sin, twoPi } from '../math';
 import { randomInteger } from '../random';
 import Grid, { CellCallback, Row } from './grid';
 
@@ -49,6 +49,15 @@ export default class PolarGrid extends Grid<PolarCell> {
       parent.outward.push(cell);
       cell.inward = parent;
     });
+  }
+
+  override get(row: number, column: number): PolarCell | undefined {
+    if (row < 0 || row >= this._rows) {
+      return;
+    }
+
+    const r = this.getRow(row);
+    return r?.[modulo(column, r?.length)];
   }
 
   override getCellBackgroundColor(_cell: PolarCell): string | void {

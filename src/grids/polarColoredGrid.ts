@@ -3,7 +3,7 @@ import Distances from '../distances';
 import PolarDistanceGrid from './polarDistanceGrid';
 
 export default class PolarColoredGrid extends PolarDistanceGrid {
-  #distances: Distances<PolarCell> | undefined;
+  private _distances: Distances<PolarCell> | undefined;
   #farthest: PolarCell | undefined;
   #maximum: number | undefined;
 
@@ -14,14 +14,14 @@ export default class PolarColoredGrid extends PolarDistanceGrid {
   static override create = (rows: number): PolarColoredGrid => new this(rows).build();
 
   override onSetDistances(distances: Distances<PolarCell>): void {
-    this.#distances = distances;
+    this._distances = distances;
     const { cell, distance } = distances.getFurthestCell();
     this.#farthest = cell;
     this.#maximum = distance;
   }
 
   override getCellBackgroundColor(cell: PolarCell): string | void {
-    if (!this.#distances?.has(cell)) {
+    if (!this._distances?.has(cell)) {
       return;
     }
 
@@ -33,10 +33,11 @@ export default class PolarColoredGrid extends PolarDistanceGrid {
       throw new Error('Maximum not determined yet.');
     }
 
-    const distance = this.#distances.getOrThrow(cell);
+    const distance = this._distances.getOrThrow(cell);
     const intensity = (this.#maximum - distance) / this.#maximum;
-    const dark = Math.round(255 * intensity);
-    const bright = Math.round(128 + 127 * intensity);
-    return `rgb(${dark}, ${dark}, ${bright})`;
+    const r = Math.round(32 + 10 * intensity);
+    const g = Math.round(32 + 96 * intensity);
+    const b = Math.round(32 + 223 * intensity);
+    return `rgb(${r}, ${g}, ${b})`;
   }
 }

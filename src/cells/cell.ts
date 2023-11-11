@@ -1,28 +1,28 @@
 import Distances from '../distances';
 
 export default abstract class Cell {
-  #row: number;
-  #column: number;
-  #links: Set<this>;
+  private _row: number;
+  private _column: number;
+  private _links: Set<this>;
 
   protected _isEmpty = false;
 
   constructor(row: number, column: number) {
-    this.#row = row;
-    this.#column = column;
-    this.#links = new Set();
+    this._row = row;
+    this._column = column;
+    this._links = new Set();
   }
 
   get row(): number {
-    return this.#row;
+    return this._row;
   }
 
   get column(): number {
-    return this.#column;
+    return this._column;
   }
 
   get links(): this[] {
-    return [...this.#links.keys()];
+    return [...this._links.keys()];
   }
 
   get isEmpty(): boolean {
@@ -30,7 +30,7 @@ export default abstract class Cell {
   }
 
   get hasLinks(): boolean {
-    return this.#links.size > 0;
+    return this._links.size > 0;
   }
 
   abstract getNeighbors<T extends Cell>(): T[];
@@ -64,7 +64,7 @@ export default abstract class Cell {
       return this;
     }
 
-    this.#links.add(cell);
+    this._links.add(cell);
     if (options.bidi) {
       cell.link(this, { bidi: false });
     }
@@ -73,7 +73,7 @@ export default abstract class Cell {
   }
 
   unlink<T extends Cell>(this: T, cell: T, options = { bidi: true }): T {
-    this.#links.delete(cell);
+    this._links.delete(cell);
     if (options.bidi) {
       cell.unlink(this, { bidi: false });
     }
@@ -82,6 +82,6 @@ export default abstract class Cell {
   }
 
   isLinkedTo<T extends Cell>(this: T, cell: T | undefined): boolean {
-    return cell ? this.#links.has(cell) : false;
+    return cell ? this._links.has(cell) : false;
   }
 }

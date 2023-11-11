@@ -4,6 +4,21 @@ import { cos, modulo, sin, twoPi } from '../math';
 import { randomInteger } from '../random';
 import Grid, { CellCallback, Row } from './grid';
 
+type Coordinate = { x: number; y: number };
+
+type CellDrawData = {
+  coordinates: {
+    a: Coordinate;
+    b: Coordinate;
+    c: Coordinate;
+    d: Coordinate;
+  };
+  innerRadius: number;
+  outerRadius: number;
+  thetaCounterClockwise: number;
+  thetaClockwise: number;
+};
+
 export default class PolarGrid extends Grid<PolarCell> {
   static #fromCoordinates = (row: number, column: number) => new PolarCell(row, column);
 
@@ -77,11 +92,7 @@ export default class PolarGrid extends Grid<PolarCell> {
   override forEachCell(cb: CellCallback<PolarCell>) {
     for (let r = 0; r < this._rows; r++) {
       for (let c = 0; c < this.getRowOrThrow(r).length; c++) {
-        const cell = this.get(r, c);
-        if (!cell) {
-          continue;
-        }
-
+        const cell = this.getOrThrow(r, c);
         if (cb({ row: r, column: c, cell }) === false) {
           return;
         }
@@ -91,6 +102,7 @@ export default class PolarGrid extends Grid<PolarCell> {
 
   override draw(canvas: HTMLCanvasElement, cellSize: number) {
     const backgroundColor = '#fff';
+    const backgroundColorEmptyCell = '#000';
     const strokeStyle = '#000';
 
     const size = 2 * this.rows * cellSize;
@@ -101,51 +113,146 @@ export default class PolarGrid extends Grid<PolarCell> {
 
     const center = size / 2;
 
-    for (const mode of ['backgrounds', 'walls'] as const) {
+    helper.fillCircle(
+      center,
+      center,
+      cellSize,
+      this.getCellBackgroundColor(this.getOrThrow(0, 0)) ?? backgroundColor
+    );
+
+    const cellCorners: Map<PolarCell, CellDrawData> = new Map();
+
+    for (const mode of ['precalculate', 'backgrounds', 'walls', 'text'] as const) {
       this.forEachCell(({ row, column, cell }) => {
         if (row === 0) {
           return;
         }
 
-        const theta = twoPi / this.getRowOrThrow(row).length;
-        const innerRadius = row * cellSize;
-        const outerRadius = innerRadius + cellSize;
-        const thetaCounterClockwise = column * theta;
-        const thetaClockwise = thetaCounterClockwise + theta;
-
-        const pointA = {
-          x: center + Math.floor(innerRadius * cos(thetaCounterClockwise)),
-          y: center + Math.floor(innerRadius * sin(thetaCounterClockwise)),
-        };
-
-        // const pointB = {
-        //   x: center + Math.floor(outerRadius * cos(thetaCounterClockwise)),
-        //   y: center + Math.floor(outerRadius * sin(thetaCounterClockwise)),
-        // };
-
-        const pointC = {
-          x: center + Math.floor(innerRadius * cos(thetaClockwise)),
-          y: center + Math.floor(innerRadius * sin(thetaClockwise)),
-        };
-
-        const pointD = {
-          x: center + Math.floor(outerRadius * cos(thetaClockwise)),
-          y: center + Math.floor(outerRadius * sin(thetaClockwise)),
-        };
+        const corners = cellCorners.get(cell);
 
         switch (mode) {
+          case 'precalculate': {
+            const theta = twoPi / this.getRowOrThrow(row).length;
+            const innerRadius = row * cellSize;
+            const outerRadius = innerRadius + cellSize;
+            const thetaCounterClockwise = column * theta;
+            const thetaClockwise = thetaCounterClockwise + theta;
+
+            const cosThetaCounterClockwise = cos(thetaCounterClockwise);
+            const sinThetaCounterClockwise = sin(thetaCounterClockwise);
+            const cosThetaClockwise = cos(thetaClockwise);
+            const sinThetaClockwise = sin(thetaClockwise);
+
+            const a = {
+              x: center + Math.round(innerRadius * cosThetaCounterClockwise),
+              y: center + Math.round(innerRadius * sinThetaCounterClockwise),
+            };
+
+            const b = {
+              x: center + Math.round(outerRadius * cosThetaCounterClockwise),
+              y: center + Math.round(outerRadius * sinThetaCounterClockwise),
+            };
+
+            const c = {
+              x: center + Math.round(innerRadius * cosThetaClockwise),
+              y: center + Math.round(innerRadius * sinThetaClockwise),
+            };
+
+            const d = {
+              x: center + Math.round(outerRadius * cosThetaClockwise),
+              y: center + Math.round(outerRadius * sinThetaClockwise),
+            };
+
+            cellCorners.set(cell, {
+              coordinates: { a, b, c, d },
+              innerRadius,
+              outerRadius,
+              thetaCounterClockwise,
+              thetaClockwise,
+            });
+
+            break;
+          }
           case 'backgrounds': {
+            if (!corners) {
+              throw new Error('Cell corners not precalculated.');
+            }
+
+            const {
+              coordinates: { a, b, d },
+              innerRadius,
+              outerRadius,
+              thetaCounterClockwise,
+              thetaClockwise,
+            } = corners;
+
+            const color = cell.isEmpty
+              ? backgroundColorEmptyCell
+              : this.getCellBackgroundColor(cell) ?? backgroundColor;
+
+            helper.fillPath((context) => {
+              context.moveTo(a.x, a.y);
+              context.arc(center, center, innerRadius, thetaCounterClockwise, thetaClockwise);
+              context.lineTo(d.x, d.y);
+              context.moveTo(b.x, b.y);
+              context.arc(center, center, outerRadius, thetaCounterClockwise, thetaClockwise);
+              context.moveTo(b.x, b.y);
+              context.lineTo(a.x, a.y);
+            }, color);
+
+            helper.fillPath((context) => {
+              context.lineTo(b.x, b.y);
+              context.lineTo(d.x, d.y);
+              context.lineTo(a.x, a.y);
+            }, color);
+
             break;
           }
           case 'walls': {
+            if (!corners) {
+              throw new Error('Cell corners not precalculated.');
+            }
+
+            const {
+              coordinates: { a, c, d },
+              innerRadius,
+              thetaCounterClockwise,
+              thetaClockwise,
+            } = corners;
+
             if (!cell.isLinkedTo(cell.inward)) {
-              helper.drawLine(pointA.x, pointA.y, pointC.x, pointC.y);
+              helper.context.moveTo(a.x, a.y);
+              helper.context.arc(
+                center,
+                center,
+                innerRadius,
+                thetaCounterClockwise,
+                thetaClockwise
+              );
+              helper.context.moveTo(a.x, a.y);
+              helper.context.stroke();
             }
 
             if (!cell.isLinkedTo(cell.clockwise)) {
-              helper.drawLine(pointC.x, pointC.y, pointD.x, pointD.y);
+              helper.drawLine(c.x, c.y, d.x, d.y);
             }
 
+            break;
+          }
+          case 'text': {
+            if (!corners) {
+              throw new Error('Cell corners not precalculated.');
+            }
+
+            const {
+              coordinates: { a, d },
+            } = corners;
+            helper.fillText(
+              (a.x + d.x - cellSize / 2) / 2,
+              (a.y + d.y + cellSize / 4) / 2,
+              this.getCellContents(cell),
+              '#ffffff55'
+            );
             break;
           }
         }

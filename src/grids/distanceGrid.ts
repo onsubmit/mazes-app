@@ -5,9 +5,12 @@ import CartesianGrid from './cartesianGrid';
 export default class DistanceGrid extends CartesianGrid {
   protected distances: Distances<CartesianCell> | undefined;
 
-  constructor(rows: number, columns: number) {
+  protected constructor(rows: number, columns: number) {
     super(rows, columns);
   }
+
+  static override create = (rows: number, columns: number): DistanceGrid =>
+    new this(rows, columns).build();
 
   override getCellContents(cell: CartesianCell): string {
     if (this.distances?.has(cell)) {

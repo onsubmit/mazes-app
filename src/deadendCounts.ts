@@ -1,7 +1,7 @@
 import AldousBroder from './algorithms/generation/aldousBroder';
 import BinaryTree from './algorithms/generation/binaryTree';
 import HuntAndKill from './algorithms/generation/huntAndKill';
-import { MazeGeneratorCartesianGrid } from './algorithms/generation/mazeGenerator';
+import MazeGenerator from './algorithms/generation/mazeGenerator';
 import RecursiveBacktracker from './algorithms/generation/recursiveBacktracker';
 import Sidewinder from './algorithms/generation/sidewinder';
 import Wilsons from './algorithms/generation/wilsons';
@@ -28,7 +28,7 @@ function loop(iterator: IterableIterator<string>, onYield: (line: string) => voi
 }
 
 function* yieldDeadendCounts({ tries, size }: GetDeadendCountsInput): IterableIterator<string> {
-  const algorithms: Array<MazeGeneratorCartesianGrid> = [
+  const algorithms: Array<MazeGenerator> = [
     new BinaryTree(),
     new Sidewinder(),
     new AldousBroder(),
@@ -46,7 +46,7 @@ function* yieldDeadendCounts({ tries, size }: GetDeadendCountsInput): IterableIt
 
     const deadendCounts: number[] = [];
     for (let t = 0; t < tries; t++) {
-      const grid = new CartesianGrid(size, size);
+      const grid = CartesianGrid.create(size, size);
       algorithm.execute(grid);
       deadendCounts.push(grid.getDeadends().length);
     }

@@ -1,19 +1,20 @@
 import Cell from './cell';
 
 export default class PolarCell extends Cell {
-  #clockWise?: PolarCell;
-  #counterClockwise?: PolarCell;
-  #inward?: PolarCell;
-  #outward: Array<PolarCell>;
+  readonly outward: Array<PolarCell>;
+
+  clockwise?: PolarCell;
+  counterClockwise?: PolarCell;
+  inward?: PolarCell;
 
   constructor(row: number, column: number) {
     super(row, column);
-    this.#outward = [];
+    this.outward = [];
   }
 
-  get neighbors(): PolarCell[] {
-    return [this.#clockWise, this.#counterClockwise, this.#inward, ...this.#outward].filter(
+  override getNeighbors<T extends Cell>(): T[] {
+    return [this.clockwise, this.counterClockwise, this.inward, ...this.outward].filter(
       Boolean
-    );
+    ) as unknown as T[];
   }
 }

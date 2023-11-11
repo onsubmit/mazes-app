@@ -32,19 +32,19 @@ export default function Chapter06() {
   mask.set(2, 2, false);
   mask.set(4, 4, false);
 
-  const maskedGrid = new MaskedGrid(mask);
+  const maskedGrid = MaskedGrid.createFromMask(mask);
   new RecursiveBacktracker().execute(maskedGrid);
 
   const generateTextMask = () => {
     const mask = Mask.fromText(textMaskValue);
-    const maskedGrid = new MaskedGrid(mask);
+    const maskedGrid = MaskedGrid.createFromMask(mask);
     new RecursiveBacktracker().execute(maskedGrid);
     setMaskedGridFromText(maskedGrid);
   };
 
   const generateImageMask = async () => {
     const mask = await Mask.fromImageAsync(ImageMaskPng);
-    const maskedGrid = new MaskedGrid(mask);
+    const maskedGrid = MaskedGrid.createFromMask(mask);
     new RecursiveBacktracker().execute(maskedGrid);
     setMaskedGridFromImage(maskedGrid);
   };

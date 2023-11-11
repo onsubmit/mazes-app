@@ -10,7 +10,7 @@ describe('CartesianCell', () => {
     expect(cell.hasLinks).toBe(false);
     expect(cell.isEmpty).toBe(false);
     expect(cell.links).toHaveLength(0);
-    expect(cell.neighbors).toHaveLength(0);
+    expect(cell.getNeighbors()).toHaveLength(0);
   });
 
   it('Should support an empty CartesianCell', () => {

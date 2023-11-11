@@ -1,9 +1,10 @@
-import CartesianGrid from '../../grids/cartesianGrid';
+import CartesianCell from '../../cells/cartesianCell';
+import Grid from '../../grids/grid';
 import { randomInteger } from '../../random';
-import { MazeGeneratorCartesianGrid } from './mazeGenerator';
+import MazeGenerator from './mazeGenerator';
 
-export default class BinaryTree implements MazeGeneratorCartesianGrid {
-  execute = <TGrid extends CartesianGrid>(grid: TGrid): TGrid => {
+export default class BinaryTree implements MazeGenerator {
+  execute = <TCell extends CartesianCell, TGrid extends Grid<TCell>>(grid: TGrid): TGrid => {
     grid.forEachCell(({ cell }) => {
       const neighbors = [cell.north, cell.east].filter(Boolean);
       const index = randomInteger(neighbors.length);

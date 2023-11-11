@@ -1,14 +1,18 @@
-import CartesianGrid from '../../grids/cartesianGrid';
+import Cell from '../../cells/cell';
+import Grid from '../../grids/grid';
 import { sample } from '../../random';
-import { MazeGeneratorCartesianGrid } from './mazeGenerator';
+import MazeGenerator from './mazeGenerator';
 
-export default class RecursiveBacktracker implements MazeGeneratorCartesianGrid {
-  execute = <TGrid extends CartesianGrid>(grid: TGrid, startAt = grid.getRandomCell()): TGrid => {
+export default class RecursiveBacktracker implements MazeGenerator {
+  execute = <TCell extends Cell, TGrid extends Grid<TCell>>(
+    grid: TGrid,
+    startAt = grid.getRandomCell()
+  ): TGrid => {
     const stack = [startAt];
 
     while (stack.length > 0) {
       const current = stack.at(-1)!;
-      const neighbors = current.neighbors.filter((n) => !n.hasLinks);
+      const neighbors = current.getNeighbors<TCell>().filter((n) => !n.hasLinks);
 
       if (neighbors.length === 0) {
         stack.pop();

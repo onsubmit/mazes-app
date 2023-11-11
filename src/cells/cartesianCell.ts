@@ -18,7 +18,7 @@ export default class CartesianCell extends Cell {
     return empty;
   }
 
-  get neighbors(): CartesianCell[] {
-    return [this.north, this.south, this.east, this.west].filter(Boolean);
+  override getNeighbors<T extends Cell>(): T[] {
+    return [this.north, this.south, this.east, this.west].filter(Boolean) as T[];
   }
 }

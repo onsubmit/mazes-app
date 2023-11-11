@@ -33,6 +33,8 @@ export default abstract class Cell {
     return this.#links.size > 0;
   }
 
+  abstract getNeighbors<T extends Cell>(): T[];
+
   getDistances<T extends Cell>(this: T): Distances<T> {
     const distances = new Distances(this);
     let frontier: Set<T> = new Set([this]);

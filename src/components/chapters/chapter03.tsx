@@ -2,12 +2,11 @@ import './chapterStyles.scss';
 
 import BinaryTree from '../../algorithms/generation/binaryTree';
 import Sidewinder from '../../algorithms/generation/sidewinder';
-import ColoredGrid from '../../grids/coloredGrid';
 import DistanceGrid from '../../grids/distanceGrid';
 import Canvas from '../canvas';
 
 export default function Chapter03() {
-  const binaryTreeGrid = new BinaryTree().execute(new DistanceGrid(10, 10));
+  const binaryTreeGrid = new BinaryTree().execute(DistanceGrid.create(10, 10));
   const binaryTreeGridStart = binaryTreeGrid.getOrThrow(0, 0);
   const binaryTreeGridEnd = binaryTreeGridStart.getDistances().getFurthestCell().cell;
 
@@ -17,7 +16,7 @@ export default function Chapter03() {
   binaryTreeGrid.setPathEnd(binaryTreeGridEnd);
   const binaryTreeGridSolved = binaryTreeGrid.toString();
 
-  const sidewinderGrid = new Sidewinder().execute(new DistanceGrid(10, 10));
+  const sidewinderGrid = new Sidewinder().execute(DistanceGrid.create(10, 10));
   const sidewinderGridStart = sidewinderGrid.getOrThrow(0, 0);
   const sidewinderGridEnd = sidewinderGridStart.getDistances().getFurthestCell().cell;
 
@@ -27,14 +26,14 @@ export default function Chapter03() {
   sidewinderGrid.setPathEnd(sidewinderGridEnd);
   const sidewinderGridSolved = sidewinderGrid.toString();
 
-  const coloredBinaryTreeGrid = new BinaryTree().execute(new ColoredGrid(50, 50));
+  const coloredBinaryTreeGrid = new BinaryTree().execute(DistanceGrid.create(50, 50));
   const coloredBinaryTreeGridStart = coloredBinaryTreeGrid.getOrThrow(
     coloredBinaryTreeGrid.rows / 2,
     coloredBinaryTreeGrid.columns / 2
   );
   coloredBinaryTreeGrid.setPathStart(coloredBinaryTreeGridStart);
 
-  const coloredSidewinderGrid = new Sidewinder().execute(new ColoredGrid(50, 50));
+  const coloredSidewinderGrid = new Sidewinder().execute(DistanceGrid.create(50, 50));
   const coloredSidewinderGridStart = coloredSidewinderGrid.getOrThrow(
     coloredSidewinderGrid.rows / 2,
     coloredSidewinderGrid.columns / 2

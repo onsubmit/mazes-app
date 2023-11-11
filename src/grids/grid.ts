@@ -11,21 +11,23 @@ export type CellCallback<T extends Cell> = (input: {
 export type RowCallback<T extends Cell> = (row: Row<T>) => boolean | void;
 
 export default abstract class Grid<T extends Cell> {
-  #getInitialCellValue: GetInitialCellValueCallback<T>;
-  #grid: Array<Row<T>>;
+  private _grid: Array<Row<T>> = [];
 
   protected _rows: number;
   protected _columns: number;
+  protected _getInitialCellValue: GetInitialCellValueCallback<T>;
 
   constructor(rows: number, columns: number, getInitialCellValue: GetInitialCellValueCallback<T>) {
     this._rows = rows;
     this._columns = columns;
-
-    this.#getInitialCellValue = getInitialCellValue;
-    this.#grid = this.#prepareGrid();
-
-    this.configureCells();
+    this._getInitialCellValue = getInitialCellValue;
   }
+
+  protected build = (): this => {
+    this._grid = this.prepareGrid();
+    this.configureCells();
+    return this;
+  };
 
   get rows(): number {
     return this._rows;
@@ -45,13 +47,15 @@ export default abstract class Grid<T extends Cell> {
 
   protected abstract configureCells(): void;
 
+  protected abstract prepareGrid(): Array<Row<T>>;
+
   abstract getCellBackgroundColor(_cell: T): string | void;
 
   abstract draw(canvas: HTMLCanvasElement, cellSize: number): void;
 
   abstract toString(): string;
 
-  get = (row: number, column: number): T | undefined => this.#grid[row]?.[column];
+  get = (row: number, column: number): T | undefined => this._grid[row]?.[column];
 
   getOrThrow = (row: number, column: number): T => {
     const cell = this.get(row, column);
@@ -62,13 +66,22 @@ export default abstract class Grid<T extends Cell> {
     return cell;
   };
 
+  getRowOrThrow = (row: number): Row<T> => {
+    const r = this._grid[row];
+    if (!r) {
+      throw new Error(`Invalid row: (${row})`);
+    }
+
+    return r;
+  };
+
   getRandomCell(): T {
     const row = randomInteger(this._rows);
     const column = randomInteger(this._columns);
     return this.getOrThrow(row, column);
   }
 
-  forEachCell = (cb: CellCallback<T>) => {
+  forEachCell(cb: CellCallback<T>) {
     for (let r = 0; r < this._rows; r++) {
       for (let c = 0; c < this._columns; c++) {
         const cell = this.getOrThrow(r, c);
@@ -77,11 +90,11 @@ export default abstract class Grid<T extends Cell> {
         }
       }
     }
-  };
+  }
 
   forEachRow = (cb: RowCallback<T>) => {
     for (let r = 0; r < this._rows; r++) {
-      if (cb(this.#grid[r]!) === false) {
+      if (cb(this.getRowOrThrow(r)) === false) {
         return;
       }
     }
@@ -97,19 +110,5 @@ export default abstract class Grid<T extends Cell> {
     });
 
     return deadends;
-  };
-
-  #prepareGrid = () => {
-    const grid: Array<Row<T>> = [];
-    for (let r = 0; r < this._rows; r++) {
-      const row: Row<T> = [];
-      for (let c = 0; c < this._columns; c++) {
-        row.push(this.#getInitialCellValue(r, c));
-      }
-
-      grid.push(row);
-    }
-
-    return grid;
   };
 }

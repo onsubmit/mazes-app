@@ -1,16 +1,15 @@
 import CanvasRenderingContextHelper from '../canvasRenderingContextHelper';
 import CartesianCell from '../cells/cartesianCell';
-import Grid, { GetInitialCellValueCallback } from './grid';
+import Grid, { Row } from './grid';
 
 export default class CartesianGrid extends Grid<CartesianCell> {
-  constructor(
-    rows: number,
-    columns: number,
-    getInitialCellValue: GetInitialCellValueCallback<CartesianCell> = (row, column) =>
-      new CartesianCell(row, column)
-  ) {
-    super(rows, columns, getInitialCellValue);
+  static #fromCoordinates = (row: number, column: number) => new CartesianCell(row, column);
+
+  protected constructor(rows: number, columns: number) {
+    super(rows, columns, CartesianGrid.#fromCoordinates);
   }
+
+  static create = (rows: number, columns: number): CartesianGrid => new this(rows, columns).build();
 
   override getCellBackgroundColor(_cell: CartesianCell): string | void {}
 
@@ -83,6 +82,20 @@ export default class CartesianGrid extends Grid<CartesianCell> {
         }
       });
     }
+  }
+
+  protected override prepareGrid(): Array<Row<CartesianCell>> {
+    const grid: Array<Row<CartesianCell>> = [];
+    for (let r = 0; r < this._rows; r++) {
+      const row: Row<CartesianCell> = [];
+      for (let c = 0; c < this._columns; c++) {
+        row.push(this._getInitialCellValue(r, c));
+      }
+
+      grid.push(row);
+    }
+
+    return grid;
   }
 
   protected override configureCells() {

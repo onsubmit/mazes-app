@@ -1,10 +1,10 @@
 import CartesianCell from '../../cells/cartesianCell';
-import CartesianGrid from '../../grids/cartesianGrid';
+import Grid from '../../grids/grid';
 import { randomBoolean, sample } from '../../random';
-import { MazeGeneratorCartesianGrid } from './mazeGenerator';
+import MazeGenerator from './mazeGenerator';
 
-export default class Sidewinder implements MazeGeneratorCartesianGrid {
-  execute = <TGrid extends CartesianGrid>(grid: TGrid): TGrid => {
+export default class Sidewinder implements MazeGenerator {
+  execute = <TCell extends CartesianCell, TGrid extends Grid<TCell>>(grid: TGrid): TGrid => {
     grid.forEachRow((row) => {
       const run: Set<CartesianCell> = new Set();
 

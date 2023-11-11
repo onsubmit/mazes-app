@@ -8,9 +8,12 @@ export default class ColoredGrid extends DistanceGrid {
   #farthest: Cell | undefined;
   #maximum: number | undefined;
 
-  constructor(rows: number, columns: number) {
+  private constructor(rows: number, columns: number) {
     super(rows, columns);
   }
+
+  static override create = (rows: number, columns: number): ColoredGrid =>
+    new this(rows, columns).build();
 
   override onSetDistances(distances: Distances<CartesianCell>): void {
     this.#myDistances = distances;

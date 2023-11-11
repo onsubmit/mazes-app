@@ -1,14 +1,15 @@
 import CartesianCell from '../../cells/cartesianCell';
-import CartesianGrid from '../../grids/cartesianGrid';
+import Cell from '../../cells/cell';
+import Grid from '../../grids/grid';
 import { sample } from '../../random';
-import { MazeGeneratorCartesianGrid } from './mazeGenerator';
+import MazeGenerator from './mazeGenerator';
 
-export default class HuntAndKill implements MazeGeneratorCartesianGrid {
-  execute = <TGrid extends CartesianGrid>(grid: TGrid): TGrid => {
+export default class HuntAndKill implements MazeGenerator {
+  execute = <TCell extends Cell, TGrid extends Grid<TCell>>(grid: TGrid): TGrid => {
     let current: CartesianCell | null = grid.getRandomCell();
 
     while (current) {
-      const unvisitedNeighbors: CartesianCell[] = current.neighbors.filter((n) => !n.hasLinks);
+      const unvisitedNeighbors: CartesianCell[] = current.getNeighbors().filter((n) => !n.hasLinks);
 
       if (unvisitedNeighbors.length > 0) {
         const neighbor = sample(unvisitedNeighbors);
@@ -18,7 +19,7 @@ export default class HuntAndKill implements MazeGeneratorCartesianGrid {
         current = null;
 
         grid.forEachCell(({ cell }) => {
-          const visitedNeighbors = cell.neighbors.filter((n) => n.hasLinks);
+          const visitedNeighbors = cell.getNeighbors().filter((n) => n.hasLinks);
           if (!cell.hasLinks && visitedNeighbors.length > 0) {
             current = cell;
 

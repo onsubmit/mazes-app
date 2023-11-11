@@ -6,20 +6,22 @@ import { useRef } from 'react';
 import HuntAndKill from '../../algorithms/generation/huntAndKill';
 import RecursiveBacktracker from '../../algorithms/generation/recursiveBacktracker';
 import { getDeadendCounts } from '../../deadendCounts';
-import ColoredGrid from '../../grids/coloredGrid';
+import CartesianColoredGrid from '../../grids/cartesianColoredGrid';
 import Canvas from '../canvas';
 
 export default function Chapter05() {
   const preRef = useRef<HTMLPreElement>(null);
 
-  const huntAndKillGrid = new HuntAndKill().execute(ColoredGrid.create(30, 30));
+  const huntAndKillGrid = new HuntAndKill().execute(CartesianColoredGrid.create(30, 30));
   const huntAndKillGridStart = huntAndKillGrid.getOrThrow(
     huntAndKillGrid.rows / 2,
     huntAndKillGrid.columns / 2
   );
   huntAndKillGrid.setPathStart(huntAndKillGridStart);
 
-  const recursiveBacktrackerGrid = new RecursiveBacktracker().execute(ColoredGrid.create(30, 30));
+  const recursiveBacktrackerGrid = new RecursiveBacktracker().execute(
+    CartesianColoredGrid.create(30, 30)
+  );
   const recursiveBacktrackerGridStart = recursiveBacktrackerGrid.getOrThrow(
     recursiveBacktrackerGrid.rows / 2,
     recursiveBacktrackerGrid.columns / 2

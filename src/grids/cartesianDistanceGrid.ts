@@ -1,15 +1,19 @@
 import CartesianCell from '../cells/cartesianCell';
 import Distances from '../distances';
 import CartesianGrid from './cartesianGrid';
+import DistanceGrid from './distanceGrid';
 
-export default class DistanceGrid extends CartesianGrid {
-  protected distances: Distances<CartesianCell> | undefined;
+export default class CartesianDistanceGrid
+  extends CartesianGrid
+  implements DistanceGrid<CartesianCell>
+{
+  distances: Distances<CartesianCell> | undefined;
 
   protected constructor(rows: number, columns: number) {
     super(rows, columns);
   }
 
-  static override create = (rows: number, columns: number): DistanceGrid =>
+  static override create = (rows: number, columns: number): CartesianDistanceGrid =>
     new this(rows, columns).build();
 
   override getCellContents(cell: CartesianCell): string {

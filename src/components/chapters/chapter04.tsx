@@ -2,18 +2,18 @@ import './chapterStyles.scss';
 
 import AldousBroder from '../../algorithms/generation/aldousBroder';
 import Wilsons from '../../algorithms/generation/wilsons';
-import ColoredGrid from '../../grids/coloredGrid';
+import CartesianColoredGrid from '../../grids/cartesianColoredGrid';
 import Canvas from '../canvas';
 
 export default function Chapter04() {
-  const aldousBroderGrid = new AldousBroder().execute(ColoredGrid.create(30, 30));
+  const aldousBroderGrid = new AldousBroder().execute(CartesianColoredGrid.create(30, 30));
   const aldousBroderGridStart = aldousBroderGrid.getOrThrow(
     aldousBroderGrid.rows / 2,
     aldousBroderGrid.columns / 2
   );
   aldousBroderGrid.setPathStart(aldousBroderGridStart);
 
-  const wilsonsGrid = new Wilsons().execute(ColoredGrid.create(30, 30));
+  const wilsonsGrid = new Wilsons().execute(CartesianColoredGrid.create(30, 30));
   const wilsonsGridStart = wilsonsGrid.getOrThrow(wilsonsGrid.rows / 2, wilsonsGrid.columns / 2);
   wilsonsGrid.setPathStart(wilsonsGridStart);
 

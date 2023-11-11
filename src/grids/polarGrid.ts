@@ -7,7 +7,7 @@ import Grid, { CellCallback, Row } from './grid';
 export default class PolarGrid extends Grid<PolarCell> {
   static #fromCoordinates = (row: number, column: number) => new PolarCell(row, column);
 
-  private constructor(rows: number) {
+  protected constructor(rows: number) {
     super(rows, 1, PolarGrid.#fromCoordinates);
   }
 
@@ -100,46 +100,58 @@ export default class PolarGrid extends Grid<PolarCell> {
     const helper = new CanvasRenderingContextHelper(canvas, backgroundColor, strokeStyle);
 
     const center = size / 2;
-    this.forEachCell(({ row, column, cell }) => {
-      if (row === 0) {
-        return;
-      }
 
-      const theta = twoPi / this.getRowOrThrow(row).length;
-      const innerRadius = row * cellSize;
-      const outerRadius = innerRadius + cellSize;
-      const thetaCounterClockwise = column * theta;
-      const thetaClockwise = thetaCounterClockwise + theta;
+    for (const mode of ['backgrounds', 'walls'] as const) {
+      this.forEachCell(({ row, column, cell }) => {
+        if (row === 0) {
+          return;
+        }
 
-      const pointA = {
-        x: center + Math.floor(innerRadius * cos(thetaCounterClockwise)),
-        y: center + Math.floor(innerRadius * sin(thetaCounterClockwise)),
-      };
+        const theta = twoPi / this.getRowOrThrow(row).length;
+        const innerRadius = row * cellSize;
+        const outerRadius = innerRadius + cellSize;
+        const thetaCounterClockwise = column * theta;
+        const thetaClockwise = thetaCounterClockwise + theta;
 
-      // const pointB = {
-      //   x: center + Math.floor(outerRadius * cos(thetaCounterClockwise)),
-      //   y: center + Math.floor(outerRadius * sin(thetaCounterClockwise)),
-      // };
+        const pointA = {
+          x: center + Math.floor(innerRadius * cos(thetaCounterClockwise)),
+          y: center + Math.floor(innerRadius * sin(thetaCounterClockwise)),
+        };
 
-      const pointC = {
-        x: center + Math.floor(innerRadius * cos(thetaClockwise)),
-        y: center + Math.floor(innerRadius * sin(thetaClockwise)),
-      };
+        // const pointB = {
+        //   x: center + Math.floor(outerRadius * cos(thetaCounterClockwise)),
+        //   y: center + Math.floor(outerRadius * sin(thetaCounterClockwise)),
+        // };
 
-      const pointD = {
-        x: center + Math.floor(outerRadius * cos(thetaClockwise)),
-        y: center + Math.floor(outerRadius * sin(thetaClockwise)),
-      };
+        const pointC = {
+          x: center + Math.floor(innerRadius * cos(thetaClockwise)),
+          y: center + Math.floor(innerRadius * sin(thetaClockwise)),
+        };
 
-      if (!cell.isLinkedTo(cell.inward)) {
-        helper.drawLine(pointA.x, pointA.y, pointC.x, pointC.y);
-      }
+        const pointD = {
+          x: center + Math.floor(outerRadius * cos(thetaClockwise)),
+          y: center + Math.floor(outerRadius * sin(thetaClockwise)),
+        };
 
-      if (!cell.isLinkedTo(cell.clockwise)) {
-        helper.drawLine(pointC.x, pointC.y, pointD.x, pointD.y);
-      }
-    });
+        switch (mode) {
+          case 'backgrounds': {
+            break;
+          }
+          case 'walls': {
+            if (!cell.isLinkedTo(cell.inward)) {
+              helper.drawLine(pointA.x, pointA.y, pointC.x, pointC.y);
+            }
 
-    helper.drawCircle(center, center, this.rows * cellSize);
+            if (!cell.isLinkedTo(cell.clockwise)) {
+              helper.drawLine(pointC.x, pointC.y, pointD.x, pointD.y);
+            }
+
+            break;
+          }
+        }
+      });
+
+      helper.drawCircle(center, center, this.rows * cellSize);
+    }
   }
 }

@@ -28,20 +28,19 @@ function loop(iterator: IterableIterator<string>, onYield: (line: string) => voi
 }
 
 function* yieldDeadendCounts({ tries, size }: GetDeadendCountsInput): IterableIterator<string> {
-  const algorithms: Array<MazeGenerator> = [
-    new BinaryTree(),
-    new Sidewinder(),
-    new AldousBroder(),
-    new Wilsons(),
-    new HuntAndKill(),
-    new RecursiveBacktracker(),
+  const algorithms: Array<{ name: string; algorithm: MazeGenerator }> = [
+    { name: 'BinaryTree', algorithm: new BinaryTree() },
+    { name: 'Sidewinder', algorithm: new Sidewinder() },
+    { name: 'AldousBroder', algorithm: new AldousBroder() },
+    { name: 'Wilsons', algorithm: new Wilsons() },
+    { name: 'HuntAndKill', algorithm: new HuntAndKill() },
+    { name: 'RecursiveBacktracker', algorithm: new RecursiveBacktracker() },
   ];
 
   const totalCells = size * size;
 
   const averages: Map<string, number> = new Map();
-  for (const algorithm of algorithms) {
-    const name = algorithm.constructor.name;
+  for (const { name, algorithm } of algorithms) {
     yield `Running ${name}...`;
 
     const deadendCounts: number[] = [];
@@ -60,7 +59,7 @@ function* yieldDeadendCounts({ tries, size }: GetDeadendCountsInput): IterableIt
   yield '';
 
   const sortedAlgorithms = algorithms
-    .map((a) => a.constructor.name)
+    .map(({ name }) => name)
     .sort((nameA, nameB) => {
       const averageA = averages.get(nameA) ?? 0;
       const averageB = averages.get(nameB) ?? 0;

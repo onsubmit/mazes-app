@@ -1,3 +1,5 @@
+import './chapterStyles.scss';
+
 import RecursiveBacktracker from '../../algorithms/generation/recursiveBacktracker';
 import PolarColoredGrid from '../../grids/polarColoredGrid';
 import Canvas from '../canvas';

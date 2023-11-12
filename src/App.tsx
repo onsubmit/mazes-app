@@ -52,6 +52,7 @@ export default function App() {
   const [value, setValue] = useState(0);
 
   const ChapterComponents = [
+    lazy(() => import('./components/chapters/chapter08')),
     lazy(() => import('./components/chapters/chapter07')),
     lazy(() => import('./components/chapters/chapter06')),
     lazy(() => import('./components/chapters/chapter05')),

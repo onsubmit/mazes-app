@@ -5,8 +5,8 @@ import CartesianDistanceGrid from './cartesianDistanceGrid';
 
 export default class CartesianColoredGrid extends CartesianDistanceGrid {
   private _distances: Distances<CartesianCell> | undefined;
-  #farthest: Cell | undefined;
-  #maximum: number | undefined;
+  private _farthest: Cell | undefined;
+  private _maximum: number | undefined;
 
   private constructor(rows: number, columns: number) {
     super(rows, columns);
@@ -18,8 +18,8 @@ export default class CartesianColoredGrid extends CartesianDistanceGrid {
   override onSetDistances(distances: Distances<CartesianCell>): void {
     this._distances = distances;
     const { cell, distance } = distances.getFurthestCell();
-    this.#farthest = cell;
-    this.#maximum = distance;
+    this._farthest = cell;
+    this._maximum = distance;
   }
 
   override getCellBackgroundColor(cell: CartesianCell): string | void {
@@ -27,16 +27,16 @@ export default class CartesianColoredGrid extends CartesianDistanceGrid {
       return;
     }
 
-    if (this.#farthest === undefined) {
+    if (this._farthest === undefined) {
       throw new Error('Farthest not determined yet.');
     }
 
-    if (this.#maximum === undefined) {
+    if (this._maximum === undefined) {
       throw new Error('Maximum not determined yet.');
     }
 
     const distance = this._distances.getOrThrow(cell);
-    const intensity = (this.#maximum - distance) / this.#maximum;
+    const intensity = (this._maximum - distance) / this._maximum;
     const dark = Math.round(255 * intensity);
     const bright = Math.round(128 + 127 * intensity);
     return `rgb(${dark}, ${dark}, ${bright})`;

@@ -3,10 +3,10 @@ import CartesianCell from '../cells/cartesianCell';
 import Grid, { Row } from './grid';
 
 export default class CartesianGrid extends Grid<CartesianCell> {
-  static #fromCoordinates = (row: number, column: number) => new CartesianCell(row, column);
+  private static _fromCoordinates = (row: number, column: number) => new CartesianCell(row, column);
 
   protected constructor(rows: number, columns: number) {
-    super(rows, columns, CartesianGrid.#fromCoordinates);
+    super(rows, columns, CartesianGrid._fromCoordinates);
   }
 
   static create = (rows: number, columns: number): CartesianGrid => new this(rows, columns).build();

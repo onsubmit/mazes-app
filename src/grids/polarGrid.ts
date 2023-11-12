@@ -20,10 +20,10 @@ type CellDrawData = {
 };
 
 export default class PolarGrid extends Grid<PolarCell> {
-  static #fromCoordinates = (row: number, column: number) => new PolarCell(row, column);
+  private static _fromCoordinates = (row: number, column: number) => new PolarCell(row, column);
 
   protected constructor(rows: number) {
-    super(rows, 1, PolarGrid.#fromCoordinates);
+    super(rows, 1, PolarGrid._fromCoordinates);
   }
 
   static create = (rows: number): PolarGrid => new this(rows).build();

@@ -1,14 +1,7 @@
 import Box from '@mui/material/Box';
 import Tab, { TabProps } from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import * as React from 'react';
-
-import Chapter02 from './components/chapters/chapter02';
-import Chapter03 from './components/chapters/chapter03';
-import Chapter04 from './components/chapters/chapter04';
-import Chapter05 from './components/chapters/chapter05';
-import Chapter06 from './components/chapters/chapter06';
-import Chapter07 from './components/chapters/chapter07';
+import { lazy, Suspense, useState } from 'react';
 
 type ChapterPanelProps = {
   children: React.ReactNode;
@@ -56,30 +49,34 @@ function getChapterPanelProps(
 }
 
 export default function App() {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
-  const chapters = [
-    <Chapter07 />,
-    <Chapter06 />,
-    <Chapter05 />,
-    <Chapter04 />,
-    <Chapter03 />,
-    <Chapter02 />,
+  const ChapterComponents = [
+    lazy(() => import('./components/chapters/chapter07')),
+    lazy(() => import('./components/chapters/chapter06')),
+    lazy(() => import('./components/chapters/chapter05')),
+    lazy(() => import('./components/chapters/chapter04')),
+    lazy(() => import('./components/chapters/chapter03')),
+    lazy(() => import('./components/chapters/chapter02')),
   ];
   return (
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={(_, value) => setValue(value)} aria-label="Chapter tabs">
-          {chapters.map((_chapter, i) => {
-            const chapterNumber = chapters.length + 1 - i;
+          {ChapterComponents.map((_chapter, i) => {
+            const chapterNumber = ChapterComponents.length + 1 - i;
             return <Tab {...getTabProps(chapterNumber)} />;
           })}
         </Tabs>
       </Box>
-      {chapters.map((chapter, i) => {
-        const chapterNumber = chapters.length + 1 - i;
+      {ChapterComponents.map((Chapter, i) => {
+        const chapterNumber = ChapterComponents.length + 1 - i;
         return (
-          <ChapterPanel {...getChapterPanelProps(value, i, chapterNumber)}>{chapter}</ChapterPanel>
+          <ChapterPanel {...getChapterPanelProps(value, i, chapterNumber)}>
+            <Suspense>
+              <Chapter />
+            </Suspense>
+          </ChapterPanel>
         );
       })}
     </Box>

@@ -2,6 +2,7 @@ import './chapterStyles.scss';
 
 import BinaryTree from '../../algorithms/generation/binaryTree';
 import Sidewinder from '../../algorithms/generation/sidewinder';
+import CartesianColoredGrid from '../../grids/cartesianColoredGrid';
 import CartesianDistanceGrid from '../../grids/cartesianDistanceGrid';
 import Canvas from '../canvas';
 
@@ -26,14 +27,14 @@ export default function Chapter03() {
   sidewinderGrid.setPathEnd(sidewinderGridEnd);
   const sidewinderGridSolved = sidewinderGrid.toString();
 
-  const coloredBinaryTreeGrid = new BinaryTree().execute(CartesianDistanceGrid.create(50, 50));
+  const coloredBinaryTreeGrid = new BinaryTree().execute(CartesianColoredGrid.create(50, 50));
   const coloredBinaryTreeGridStart = coloredBinaryTreeGrid.getOrThrow(
     coloredBinaryTreeGrid.rows / 2,
     coloredBinaryTreeGrid.columns / 2
   );
   coloredBinaryTreeGrid.setPathStart(coloredBinaryTreeGridStart);
 
-  const coloredSidewinderGrid = new Sidewinder().execute(CartesianDistanceGrid.create(50, 50));
+  const coloredSidewinderGrid = new Sidewinder().execute(CartesianColoredGrid.create(50, 50));
   const coloredSidewinderGridStart = coloredSidewinderGrid.getOrThrow(
     coloredSidewinderGrid.rows / 2,
     coloredSidewinderGrid.columns / 2
